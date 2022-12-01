@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Main {
 
-	static int day = 1;
+	static int day = 2;
 
 	static StringBuilder inputpath = new StringBuilder();
 	static StringBuilder testpath = new StringBuilder();

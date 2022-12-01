@@ -47,7 +47,7 @@ public class Day1 {
 
 		food.add(sum);
 
-		Integer max = Collections.max(food);
+		int max = Collections.max(food);
 
 		System.out.println("The elf carrying the most food is carrying " + max + " food");
 
