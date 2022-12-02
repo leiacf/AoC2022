@@ -51,17 +51,10 @@ public class Day2 {
 		}
 
 		return sum;
+
 	}
 
 	private int calculate(String elf, String me){
-
-		// A = Rock
-		// B = Paper
-		// C = Scissors
-
-		// X = Rock
-		// Y = Paper
-		// Z = Scissors
 
 		int result = 0;
 
@@ -107,7 +100,7 @@ public class Day2 {
 
 			default:
 			
-				System.exit(-1);
+				System.exit(-1);		// This shouldn't happen so let's exit
 
 		}
 
@@ -131,132 +124,60 @@ public class Day2 {
 
 			String[] game = string.split(" ");
 
-			String need = findCorrect(game[0], game[1]);
+			String mapped = remap(game[0], game[1]);
 
-			sum += calculate(game[0], need);
+			sum += calculate(game[0], mapped);
 
 		}
 
 		return sum;
 	}
 
-	private String findCorrect(String elf, String me) {
+	private String remap(String elf, String me) {
 
-		String result = "win";
+		String result = "error";	// dummy value
 
 		switch (me){
 
-			case "X":		// lose
+			case "X":		// I should lose
 
 				if (elf.equals("A")) {	
 					result = "Z"; 
-				} 
-				
-				else if (elf.equals("B"))	{	
+				} else if (elf.equals("B")) {	
 					result = "X";  
-				}
-
-				else { 
+				} else { 
 					result = "Y"; 
 				}
 
 				break;
 
-			case "Y":		// draw
+			case "Y":		// I should draw
 
-			if (elf.equals("A")){
-
-				result = "X";
-
-			} else if (elf.equals("B")){
-
-				result = "Y";
-
-			} else {
-				 result = "Z";
-			}
+				if (elf.equals("A")){
+					result = "X";
+				} else if (elf.equals("B")){
+					result = "Y";
+				} else {
+					result = "Z";
+				}
 
 				break;
 
-			case "Z":		// win
+			case "Z":		// I should win
 
-			if (elf.equals("A")){
-				result = "Y";
-
-			} else if (elf.equals("B")){
-				result = "Z";
-
-			} else {
-				result = "X";
-				
-			}
+				if (elf.equals("A")){
+					result = "Y";
+				} else if (elf.equals("B")){
+					result = "Z";
+				} else {
+					result = "X";
+				}
 			
 				break;
 
 			default:
 
-			System.exit(-1);
-
-		}
-
-		return result;
-	}
-
-	private int calculateAgain(String elf, String me){
-
-		// A = Rock
-		// B = Paper
-		// C = Scissors
-
-		// X = Rock
-		// Y = Paper
-		// Z = Scissors
-
-		int result = 0;
-
-		if (me.equals("X")){
-			result += 1;
-		} else if (me.equals("Y")){
-			result += 2;
-		} else {
-			result += 3;
-		}
-
-		switch (elf){
-
-			case "A":
-
-				if (me.equals("X")){
-					result += 3;
-				} else if (me.equals("Y")){
-					result += 6;
-				} 
-
-				break;
-
-			case "B":
-
-				if (me.equals("Y")){
-					result += 3;
-				} else if (me.equals("Z")){
-					result += 6;
-				}
-
-				break;
-
-			case "C":
-
-				if (me.equals("Z")){
-					result += 3;
-				} else if (me.equals("X")){
-					result += 6;
-				}
-
-				break;
-
-			default:
-			
-				System.exit(-1);
+				System.exit(-1);		// This shouldn't happen so let's exit
 
 		}
 
