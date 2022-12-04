@@ -18,7 +18,7 @@ public class Day4 {
 		System.out.println();
 
 		part1(testinput);
-		//part1(input);
+		part1(input);
 
 		System.out.println();
 		System.out.println("Part 2: ");
@@ -37,7 +37,7 @@ public class Day4 {
 			
 			String[] temp = input.split(",");
 
-			if (unpackSections(temp)) { sum++;}
+			if (numberVersion(temp)) { sum++; }
 
 		}
 
@@ -45,37 +45,55 @@ public class Day4 {
 
 	}
 
-	private boolean unpackSections(String[] input){
+	private boolean numberVersion(String[] input){
 
 		String[] first = input[0].split("-");
 		String[] second = input[1].split("-");
 
-		StringBuilder sectionOne = new StringBuilder();
-		StringBuilder sectionTwo = new StringBuilder();
+		int a = Integer.parseInt(first[0]);
+		int b = Integer.parseInt(first[1]);
+		int c = Integer.parseInt(second[0]);
+		int d = Integer.parseInt(second[1]);
 
-		for (int i = Integer.parseInt(first[0]); i <= Integer.parseInt(first[1]); i++){
+		if (a <= c && b >= d) { return true; }
+		if (c <= a && d >= b) { return true; }
 
-			sectionOne.append(i);
-
-		}
-
-		for (int i = Integer.parseInt(second[0]); i <= Integer.parseInt(second[1]); i++){
-
-			sectionTwo.append(i);
-
-		}
-
-		return contains(sectionOne, sectionTwo);
-			
-	}
-
-	private boolean contains(StringBuilder sectionOne, StringBuilder sectionTwo){
-
-		return sectionOne.toString().contains(sectionTwo.toString()) || sectionTwo.toString().contains(sectionOne.toString());
+		return false;
 
 	}
 
 	private void part2(ArrayList<String> data){
+
+		int sum = 0;
+
+		for (String input : data) {
+			
+			String[] temp = input.split(",");
+
+			if (overlap(temp)) { sum++; }
+
+		}
+
+		System.out.println("The amount of sections overlapping are " + sum);
+
+	}
+
+	private boolean overlap(String[] input){
+
+		String[] first = input[0].split("-");
+		String[] second = input[1].split("-");
+
+		int a = Integer.parseInt(first[0]);
+		int b = Integer.parseInt(first[1]);
+		int c = Integer.parseInt(second[0]);
+		int d = Integer.parseInt(second[1]);
+
+		if (a <= c && c <= b) { return true; }
+		if (a <= d && d <= b) { return true; }
+		if (c <= a && a <= d) { return true; }
+		if (c <= b && b <= d) { return true; }
+
+		return false;
 
 	}
 
