@@ -31,14 +31,13 @@ public class Day5 {
 
 	private void part1(ArrayList<String> data){
 
-		int number = getStackNumber(data);
+		int numberOfStacks = getStackNumber(data);
+		int firstLine = getFirstLine(data);
+		ArrayList<ArrayList<String>> stacks = fillStacks(data, numberOfStacks);
 
-		ArrayList<ArrayList<String>> stacks = fillStacks(data, number);
-
-		stacks = processStacks(data, stacks);
+		moveCrates(stacks, data, firstLine);
 
 		String output = getfinal(stacks);
-
 		System.out.println("The final word is: " + output);
 
 	}
@@ -56,6 +55,19 @@ public class Day5 {
 		}
 
 		return 0;
+	}
+
+	private ArrayList<ArrayList<String>> createStacks(int number){
+
+		ArrayList<ArrayList<String>> stacks = new ArrayList<ArrayList<String>>();
+
+		for (int i = 0; i < number; i++){
+			
+			stacks.add(new ArrayList<String>());
+
+		}
+
+		return stacks;
 	}
 
 	private ArrayList<ArrayList<String>> fillStacks(ArrayList<String> data, int number) {
@@ -98,20 +110,7 @@ public class Day5 {
 
 	}
 
-	private ArrayList<ArrayList<String>> createStacks(int number){
-
-		ArrayList<ArrayList<String>> stacks = new ArrayList<ArrayList<String>>();
-
-		for (int i = 0; i < number; i++){
-			
-			stacks.add(new ArrayList<String>());
-
-		}
-
-		return stacks;
-	}
-
-	private ArrayList<ArrayList<String>> processStacks(ArrayList<String> data, ArrayList<ArrayList<String>> stacks) {
+	private int getFirstLine (ArrayList<String> data) {
 		
 		int i = 0;
 
@@ -121,50 +120,43 @@ public class Day5 {
 
 		i++;
 
-
-		for (; i < data.size(); i++){
-
-			String temp = data.get(i);
-
-			stacks = moveCrates(stacks, temp);
-
-		}
-
-		return stacks;
+		return i;
 
 	}
 
-	private ArrayList<ArrayList<String>> moveCrates(ArrayList<ArrayList<String>> stacks, String temp) {
+	private void moveCrates(ArrayList<ArrayList<String>> stacks, ArrayList<String> data, int line) {
 
-		temp = temp.replace("move ", "");
-		temp = temp.replace("from ", "");
-		temp = temp.replace("to ", "");
+		for (; line < data.size(); line++){
 
-		String[] instructions = temp.split(" ");
+			String temp = data.get(line);
 
-		int amount = Integer.parseInt(instructions[0]);
-		int from = Integer.parseInt(instructions[1]);
-		int to = Integer.parseInt(instructions[2]);
+			temp = temp.replace("move ", "");
+			temp = temp.replace("from ", "");
+			temp = temp.replace("to ", "");
 
-		ArrayList<String> fromList = stacks.get(from-1);
-		ArrayList<String> toList = stacks.get(to-1);
-		ArrayList<String> removeAndAdd = new ArrayList<String>();
+			String[] instructions = temp.split(" ");
 
-		for (int i = 0; i < amount; i++){
-			removeAndAdd.add(fromList.get(i));
-		}
+			int amount = Integer.parseInt(instructions[0]);
+			int from = Integer.parseInt(instructions[1]);
+			int to = Integer.parseInt(instructions[2]);
 
-		for (int i = 0; i < removeAndAdd.size(); i++){
-			fromList.remove(0);
-		}
+			ArrayList<String> fromList = stacks.get(from-1);
+			ArrayList<String> toList = stacks.get(to-1);
+			ArrayList<String> removeAndAdd = new ArrayList<String>();
 
-		for (int i = 0; i < removeAndAdd.size(); i++){
-			toList.add(0, removeAndAdd.get(i));
-		}
+			for (int i = 0; i < amount; i++){
+				removeAndAdd.add(fromList.get(i));
+			}
 
-		// printStacks(stacks);
+			for (int i = 0; i < removeAndAdd.size(); i++){
+				fromList.remove(0);
+			}
 
-		return stacks;
+			for (int i = 0; i < removeAndAdd.size(); i++){
+				toList.add(0, removeAndAdd.get(i));
+			}
+
+		}	
 
 	}
 
@@ -198,71 +190,51 @@ public class Day5 {
 
 	private void part2(ArrayList<String> data){
 
-		int number = getStackNumber(data);
+		int numberOfStacks = getStackNumber(data);
+		int firstLine = getFirstLine(data);
+		ArrayList<ArrayList<String>> stacks = fillStacks(data, numberOfStacks);
 
-		ArrayList<ArrayList<String>> stacks = fillStacks(data, number);
-
-		stacks = processStacksAgain(data, stacks);
+		moveCratesAgain(stacks, data, firstLine);
 
 		String output = getfinal(stacks);
-
 		System.out.println("The final word is: " + output);
 
 	}
 
-	private ArrayList<ArrayList<String>> processStacksAgain(ArrayList<String> data, ArrayList<ArrayList<String>> stacks) {
-		
-		int i = 0;
 
-		while (! data.get(i).isBlank()){
-			i++;
-		}
+	private void moveCratesAgain(ArrayList<ArrayList<String>> stacks, ArrayList<String> data, int line) {
 
-		i++;
+		for (; line < data.size(); line++){
 
+			String temp = data.get(line);
 
-		for (; i < data.size(); i++){
+			temp = temp.replace("move ", "");
+			temp = temp.replace("from ", "");
+			temp = temp.replace("to ", "");
 
-			String temp = data.get(i);
+			String[] instructions = temp.split(" ");
 
-			stacks = moveCratesAgain(stacks, temp);
+			int amount = Integer.parseInt(instructions[0]);
+			int from = Integer.parseInt(instructions[1]);
+			int to = Integer.parseInt(instructions[2]);
 
-		}
+			ArrayList<String> fromList = stacks.get(from-1);
+			ArrayList<String> toList = stacks.get(to-1);
+			ArrayList<String> removeAndAdd = new ArrayList<String>();
 
-		return stacks;
+			for (int i = 0; i < amount; i++){
+				removeAndAdd.add(fromList.get(i));
+			}
 
-	}
+			for (int i = 0; i < removeAndAdd.size(); i++){
+				fromList.remove(0);
+			}
 
+			for (int i = removeAndAdd.size()-1; i >=0; i--){
+				toList.add(0, removeAndAdd.get(i));
+			}
 
-	private ArrayList<ArrayList<String>> moveCratesAgain(ArrayList<ArrayList<String>> stacks, String temp) {
-
-		temp = temp.replace("move ", "");
-		temp = temp.replace("from ", "");
-		temp = temp.replace("to ", "");
-
-		String[] instructions = temp.split(" ");
-
-		int amount = Integer.parseInt(instructions[0]);
-		int from = Integer.parseInt(instructions[1]);
-		int to = Integer.parseInt(instructions[2]);
-
-		ArrayList<String> fromList = stacks.get(from-1);
-		ArrayList<String> toList = stacks.get(to-1);
-		ArrayList<String> removeAndAdd = new ArrayList<String>();
-
-		for (int i = 0; i < amount; i++){
-			removeAndAdd.add(fromList.get(i));
-		}
-
-		for (int i = 0; i < removeAndAdd.size(); i++){
-			fromList.remove(0);
-		}
-
-		for (int i = removeAndAdd.size()-1; i >= 0; i--){
-			toList.add(0, removeAndAdd.get(i));
-		}
-
-		return stacks;
+		}	
 
 	}
 
