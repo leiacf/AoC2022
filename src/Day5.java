@@ -33,9 +33,10 @@ public class Day5 {
 
 		int numberOfStacks = getStackNumber(data);
 		int firstLine = getFirstLine(data);
-		ArrayList<ArrayList<String>> stacks = fillStacks(data, numberOfStacks);
-
-		moveCrates(stacks, data, firstLine);
+		ArrayList<ArrayList<String>> stacks = createStacks(numberOfStacks);
+		
+		fillStacks(data, stacks);
+		moveCrates(stacks, data, firstLine, false);
 
 		String output = getfinal(stacks);
 		System.out.println("The final word is: " + output);
@@ -44,11 +45,13 @@ public class Day5 {
 
 	private int getStackNumber(ArrayList<String> data) {
 
+
 		for (String string : data) {
 			
 			if (string.startsWith(" 1")){
 
-				return Integer.parseInt(string.substring(string.length()-2, string.length()-1));
+				String[] numbers = string.split(" ");
+				return Integer.parseInt(numbers[numbers.length -1]);
 
 			}
 
@@ -70,12 +73,10 @@ public class Day5 {
 		return stacks;
 	}
 
-	private ArrayList<ArrayList<String>> fillStacks(ArrayList<String> data, int number) {
+	private void fillStacks(ArrayList<String> data, ArrayList<ArrayList<String>> stacks) {
 
 		int i = 0;
 		String temp = data.get(i);
-
-		ArrayList<ArrayList<String>> stacks = createStacks(number);
 
 		while (! temp.startsWith(" 1")){
 
@@ -84,20 +85,18 @@ public class Day5 {
 
 		}
 
-		for (int k = 0; k < i; k++){
+		for (int j = 0; j < i; j++){
 
-			temp = data.get(k);
+			temp = data.get(j);
 			int index = 0;
 
+			for (int k = 1; k < temp.length(); k+=4){
 
-			for (int j = 1; j < temp.length(); j+=4){
-
-				String substring = temp.substring(j, j+1);
+				String substring = temp.substring(k, k+1);
 
 				if (! substring.equals(" ")){
 					ArrayList<String> list = stacks.get(index);
 					list.add(substring);
-					
 				}
 
 				index++;
@@ -105,8 +104,6 @@ public class Day5 {
 			}
 
 		}
-
-		return stacks;
 
 	}
 
@@ -124,15 +121,13 @@ public class Day5 {
 
 	}
 
-	private void moveCrates(ArrayList<ArrayList<String>> stacks, ArrayList<String> data, int line) {
+	private void moveCrates(ArrayList<ArrayList<String>> stacks, ArrayList<String> data, int line, boolean part2) {
 
 		for (; line < data.size(); line++){
 
 			String temp = data.get(line);
 
-			temp = temp.replace("move ", "");
-			temp = temp.replace("from ", "");
-			temp = temp.replace("to ", "");
+			temp = temp.replaceAll("move |from |to ", "").trim();
 
 			String[] instructions = temp.split(" ");
 
@@ -142,21 +137,20 @@ public class Day5 {
 
 			ArrayList<String> fromList = stacks.get(from-1);
 			ArrayList<String> toList = stacks.get(to-1);
-			ArrayList<String> removeAndAdd = new ArrayList<String>();
 
-			for (int i = 0; i < amount; i++){
-				removeAndAdd.add(fromList.get(i));
+			if (part2 == false ){
+				for (int i = 0; i < amount; i++){
+					String crate = fromList.remove(0);
+					toList.add(0, crate);
+				}
+			} else {
+				for (int i = amount-1; i >= 0; i--){
+					String crate = fromList.remove(i);
+					toList.add(0, crate);
+				}
 			}
 
-			for (int i = 0; i < removeAndAdd.size(); i++){
-				fromList.remove(0);
-			}
-
-			for (int i = 0; i < removeAndAdd.size(); i++){
-				toList.add(0, removeAndAdd.get(i));
-			}
-
-		}	
+		}
 
 	}
 
@@ -178,48 +172,13 @@ public class Day5 {
 
 		int numberOfStacks = getStackNumber(data);
 		int firstLine = getFirstLine(data);
-		ArrayList<ArrayList<String>> stacks = fillStacks(data, numberOfStacks);
-
-		moveCratesAgain(stacks, data, firstLine);
+		ArrayList<ArrayList<String>> stacks = createStacks(numberOfStacks);
+		
+		fillStacks(data, stacks);
+		moveCrates(stacks, data, firstLine, true);
 
 		String output = getfinal(stacks);
 		System.out.println("The final word is: " + output);
-
-	}
-
-	private void moveCratesAgain(ArrayList<ArrayList<String>> stacks, ArrayList<String> data, int line) {
-
-		for (; line < data.size(); line++){
-
-			String temp = data.get(line);
-
-			temp = temp.replace("move ", "");
-			temp = temp.replace("from ", "");
-			temp = temp.replace("to ", "");
-
-			String[] instructions = temp.split(" ");
-
-			int amount = Integer.parseInt(instructions[0]);
-			int from = Integer.parseInt(instructions[1]);
-			int to = Integer.parseInt(instructions[2]);
-
-			ArrayList<String> fromList = stacks.get(from-1);
-			ArrayList<String> toList = stacks.get(to-1);
-			ArrayList<String> removeAndAdd = new ArrayList<String>();
-
-			for (int i = 0; i < amount; i++){
-				removeAndAdd.add(fromList.get(i));
-			}
-
-			for (int i = 0; i < removeAndAdd.size(); i++){
-				fromList.remove(0);
-			}
-
-			for (int i = removeAndAdd.size()-1; i >=0; i--){
-				toList.add(0, removeAndAdd.get(i));
-			}
-
-		}	
 
 	}
 

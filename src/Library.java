@@ -1,6 +1,6 @@
 public class Library {
    
-    public static String[] getNumberFromString(String string){
+    public static String[] getNumbersFromString(String string){
 
         String temp = string.replaceAll("[^-?\\d+]", " ");
 		temp = temp.replaceAll(" +", " ");
