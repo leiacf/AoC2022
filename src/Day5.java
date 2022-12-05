@@ -174,20 +174,6 @@ public class Day5 {
 
 	}
 
-	private void printStacks(ArrayList<ArrayList<String>> stacks){
-
-		for (ArrayList<String> arrayList : stacks) {
-
-			for (int k = 0; k < arrayList.size(); k++){
-				System.out.println(arrayList.get(k));
-			}
-			
-			System.out.println();
-
-		}
-
-	}
-
 	private void part2(ArrayList<String> data){
 
 		int numberOfStacks = getStackNumber(data);
