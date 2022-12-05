@@ -187,7 +187,6 @@ public class Day5 {
 
 	}
 
-
 	private void moveCratesAgain(ArrayList<ArrayList<String>> stacks, ArrayList<String> data, int line) {
 
 		for (; line < data.size(); line++){
