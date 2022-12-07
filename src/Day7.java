@@ -1,10 +1,10 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Day7 {
 
 	ArrayList<String> testinput;
 	ArrayList<String> input;
+	Directory root = new Directory("/", null);
 
 	Day7(ArrayList<String> testinput, ArrayList<String> input) {
 
@@ -48,67 +48,47 @@ public class Day7 {
 
 	private void part1(ArrayList<String> data){
 
-		Directory structure = getStructure(data);
+		createStructure(data);
+		long size = root.getSize();
 
-		long size = structure.getSize();
-
+		// Total Size
 		System.out.println("The total size of all directories is " + size);
+		
+		// The 4 largest directories??
 	
 	}
 
-	private Directory getStructure(ArrayList<String> data) {
+	private void createStructure(ArrayList<String> data) {
 
-		Directory structure = new Directory("/");
+		Directory current = root;
 
-		for (int i = 0; i < data.size(); ) {
+		for (int i = 0; i < data.size(); i++) {
 
-			i = parseData(data, structure, i);
+			current = parseData(data.get(i), current);
 			
 		}
-
-		return structure;
+;
 	}
 
-	private int parseData(ArrayList<String> data, Directory structure, int i) {
-		
-		String command = data.get(i);
-		String directory = null;
-		String line = null;
+	private Directory parseData(String line, Directory current) {
 
-		i++;
+		switch (line.charAt(0)){
 
-		switch (command.charAt(2)){
-
-			case 'c':
-
-					if (command.contains("/")){
-						// go to root directory
-
-					} else if (command.contains("cd ")){
-						directory = command.substring(3);
-					}
+			case '$':			// command
 
 				break;
 
-			case 'l':
-
-				line = data.get(i);
-
-				while (i < data.size() && line.charAt(0) != '$'){
-					line = data.get(i);
-
-					i++;
-				}
+			case 'd':			// directory
 
 				break;
 
-			default:
-				// isn't a command?
-				System.exit(-1);	
+			default:			// file
+
+				break;
 
 		}
 
-		return i;
+		return current;
 
 	}
 

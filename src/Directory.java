@@ -6,17 +6,19 @@ public class Directory {
     ArrayList<Directory> directories = new ArrayList<>();
     String name;
     long size = 0;
+    Directory parent = null;
 
-    Directory(String name){
+    Directory(String name, Directory parent){
         this.name = name;
+        this.parent = parent;
     }
 
     protected void addFiles(String file, int size){
         files.put(file, size);
     }
 
-    protected void addDirectory(String name){
-        directories.add(new Directory(name));
+    protected void addDirectory(String name, Directory parent){
+        directories.add(new Directory(name, parent));
     }
 
     protected long getSize(){
