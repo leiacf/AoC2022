@@ -21,6 +21,10 @@ public class Directory {
         directories.add(new Directory(name, parent));
     }
 
+    protected Directory getParent(){
+        return parent;
+    }
+
     protected long getSize(){
 
         if (size == 0){

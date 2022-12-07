@@ -5,6 +5,7 @@ public class Day7 {
 	ArrayList<String> testinput;
 	ArrayList<String> input;
 	Directory root = new Directory("/", null);
+	int index = 0;
 
 	Day7(ArrayList<String> testinput, ArrayList<String> input) {
 
@@ -62,35 +63,66 @@ public class Day7 {
 
 		Directory current = root;
 
-		for (int i = 0; i < data.size(); i++) {
+		while (index < data.size()) {
 
-			current = parseData(data.get(i), current);
+			current = parseData(data.get(index), current, data);
 			
 		}
 ;
 	}
 
-	private Directory parseData(String line, Directory current) {
+	private Directory parseData(String line, Directory current, ArrayList<String> data) {
 
-		switch (line.charAt(0)){
+		if (line.charAt(0) == '$'){
+			current = parseCommand(line, current, data);
+		}
 
-			case '$':			// command
+		index++;
+		return current;
+
+	}
+
+
+	private Directory parseCommand(String line, Directory current, ArrayList<String> data){
+
+		String command = line.substring(2);
+
+		switch (command){
+
+			case "cd \\":
+
+				current = root;
+				break;
+
+			case "cd ..":
+
+				if (current.getParent() != null){
+					current = current.getParent();
+				}
+				break;
+
+			case "ls":
+
+				// list files
+				// add to current directory
+				// update index
 
 				break;
 
-			case 'd':			// directory
+			default:
 
-				break;
-
-			default:			// file
+				// if we're here we're entering a directory
+				// cd X
 
 				break;
 
 		}
 
+
 		return current;
 
 	}
+
 
 	private void part2(ArrayList<String> data){
 		
