@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.awt.Point;
 
 public class Day9 {
@@ -49,9 +48,7 @@ public class Day9 {
 
 
 		for (String line : data) {
-
 			parseLine(line, positions, points);
-
 		}
 
 		return positions.size();
@@ -61,65 +58,40 @@ public class Day9 {
 	private void parseLine(String line, ArrayList<Point> positions, ArrayList<Point> points){
 
 		int number = getNumber(line);
-
 		Point head = points.get(0);
-		Point tail = points.get(points.size()-1);
 
-		switch (line.charAt(0)){
+		for (int i = 0; i < number; i++){
+			switch (line.charAt(0)){
 
-			case 'U':
-
-				for (int i = 0; i < number; i++){
+				case 'U':
 
 					head.setLocation(head.getX(), head.getY() + 1);
-					updatePositions(positions, points);
+					break;
 
-				}
-
-				break;
-
-			case 'L':
-
-				for (int i = 0; i < number; i++){
+				case 'L':
 
 					head.setLocation(head.getX() - 1, head.getY());
-					updatePositions(positions, points);
-					
-				}
-			
-				break;
+					break;
 
-			case 'D':
-
-				for (int i = 0; i < number; i++){
+				case 'D':
 
 					head.setLocation(head.getX(), head.getY() - 1);
-					updatePositions(positions, points);
+					break;
 
-				}
-			
-				break;
-
-			case 'R':
-
-				for (int i = 0; i < number; i++){
+				case 'R':
 
 					head.setLocation(head.getX() + 1, head.getY());
-					updatePositions(positions, points);
-					
-				}
-			
-				break;
+					break;
 
-			default:
-			
-				break;
+				default:
+				
+					break;
 
-		}
+			}
 
-		points.set(0, head);
-		points.set(points.size()-1, tail);
+			updatePositions(positions, points);
 
+		}	
 	}
 
 	private void updatePositions(ArrayList<Point> positions, ArrayList<Point> points){
@@ -127,7 +99,7 @@ public class Day9 {
 		Point first = null;
 		Point second = null;
 
-		for (int i = 0; i  < points.size()-1; i++){
+		for (int i = 0; i < points.size() -1 ; i++){
 
 			first = points.get(i);
 			second = points.get(i+1);
@@ -138,33 +110,22 @@ public class Day9 {
 			int sY = (int) second.getY();
 			int sX = (int) second.getX();
 
-			if (fY - sY >= 2){
+			int diffY = fY-sY;
+			int diffX = fX-sX;
 
-				sY++;
-
-				if (fX < sX){
-					sX--;
-				} else if (fX > sX){
-					sX++;
-				}
-	
-				second.setLocation(sX, sY);
-			
-			} else if (sY - fY >= 2){
-
-				sY--;
+			if (Math.abs(diffY) >= 2){
+				
+				sY += diffY > 0 ? 1 : -1;
 
 				if (fX < sX){
 					sX--;
 				} else if (fX > sX){
 					sX++;
 				}
-	
-				second.setLocation(sX, sY);
+					
+			} else if (Math.abs(diffX) >= 2){
 
-			} else if (fX - sX >= 2){
-
-				sX++;
+				sX += diffX > 0 ? 1 : -1;
 
 				if (fY < sY){
 					sY--;
@@ -172,27 +133,9 @@ public class Day9 {
 					sY++;
 				}
 
-				second.setLocation(sX, sY);
-
-			} else if (sX - fX >= 2){
-
-				fX--;
-
-				if (sX - fX >= 2){
-
-					sX--;
-
-					if (fY < sY){
-						sY--;
-					} else if (fY > sY){
-						sY++;
-					}
-
-				}
-
-				second.setLocation(sX, sY);
-
 			}
+
+			second.setLocation(sX, sY);
 
 			if (points.get(points.size()-1) == second){
 
