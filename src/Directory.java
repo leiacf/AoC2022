@@ -13,16 +13,55 @@ public class Directory {
         this.parent = parent;
     }
 
-    protected void addFiles(String file, int size){
+    protected void addFile(String file, int size){
         files.put(file, size);
     }
 
-    protected void addDirectory(String name, Directory parent){
-        directories.add(new Directory(name, parent));
+    protected void addChild(String name){
+        directories.add(new Directory(name, this));
+    }
+
+    protected boolean hasChild(String search){
+        
+        for (Directory directory : directories) {
+            if (directory.getName().equals(search)){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    protected boolean hasFile(String name){
+        
+        if (files.containsKey(name)){ 
+            return true;
+        }
+        
+        return false;
     }
 
     protected Directory getParent(){
         return parent;
+    }
+
+    protected Directory getChild(String search){
+
+        for (Directory directory : directories) {
+            if (directory.getName().equals(search)){
+                return directory;
+            }
+        }
+
+        return null;
+    }
+
+    protected ArrayList<Directory> getChildren(){
+        return directories;
+    }
+
+    protected String getName(){
+        return name;
     }
 
     protected long getSize(){
