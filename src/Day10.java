@@ -163,7 +163,7 @@ public class Day10 {
 	private int drawPixels(int cycle, int registry, ArrayList<String[]> screen, int cycles){
 
 		int line = cycle / 40;
-		int position = (registry % 40);
+		int position = registry;
 		String[] current = screen.get(line);
 
 		for (int i = 0; i < cycles; i++){
