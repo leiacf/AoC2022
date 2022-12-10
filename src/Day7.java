@@ -5,8 +5,6 @@ public class Day7 {
 
 	ArrayList<String> testinput;
 	ArrayList<String> input;
-	Directory root = new Directory("/", null);
-	int index = 0;
 
 	Day7(ArrayList<String> testinput, ArrayList<String> input) {
 
@@ -21,33 +19,24 @@ public class Day7 {
 		System.out.println();
 
 		part1(testinput);
-
-		root = new Directory("/", null);
-		index = 0;
-		
 		part1(input);
 
 		System.out.println();
 		System.out.println("Part 2: ");
 		System.out.println();
 
-		root = new Directory("/", null);
-		index = 0;
-
 		part2(testinput);
-
-		root = new Directory("/", null);
-		index = 0;
-
 		part2(input);
 
 	}
 
 	private void part1(ArrayList<String> data){
 
-		createStructure(data);
+		Directory root = new Directory("/", null);
+		createStructure(data, root);
+		
 		long totalSize = root.getSize();
-		long answerSize = findSizes();
+		long answerSize = findSizes(root);
 
 		// Total Size
 		System.out.println("The total size of all directories is " + totalSize);
@@ -57,126 +46,76 @@ public class Day7 {
 	
 	}
 
-	private void createStructure(ArrayList<String> data) {
+	private void createStructure(ArrayList<String> data, Directory current){
 
-		Directory current = root;
+		for (String line : data){
 
-		while (index < data.size()) {
+			String[] split = line.split(" ");
+			String temp = split[0];
+			String name = split[1];
 
-			current = parseData(data.get(index), current, data);
-			
-		}
-;
-	}
+			if (line.contains("$ cd ")){
+				
+				String dir = split[2];
 
-	private Directory parseData(String line, Directory current, ArrayList<String> data) {
+				switch (dir){
 
-		if (line.charAt(0) == '$'){
-			current = parseCommand(line, current, data);
-		}
-	
-		return current;
+					case "..":
 
-	}
+						current = current.getParent();
+						break;
 
-	private Directory parseCommand(String line, Directory current, ArrayList<String> data){
+					case "/":
 
-		String command = line.substring(2);
-
-		switch (command){
-
-			case "cd \\":
-
-				current = root;
-				index++;
-				break;
-
-			case "cd ..":
-
-				if (current.getParent() == null){
-					System.out.println("I AM ERROR");
-					System.exit(-1);
-					
-				}
-
-				current = current.getParent();
-
-				index++;
-
-				break;
-
-			case "ls":
-
-				index++;
-				String temp = data.get(index);
-
-				while (temp.charAt(0) != '$'){
-
-					String[] split = temp.split(" ");
-					char test = temp.charAt(0);
-					String name = split[1];
-
-					if (Character.isDigit(test)){
-
-						String size = split[0];
-
-						if (current.hasFile(name) == false){
-							current.addFile(name, Integer.parseInt(size));
-						}	
-
-					} else if (test == 'd' ){
-
-						// got directory
-
-						if (current.hasChild(name) == false){
-							current.addChild(name);
+						while (current.getName().equals("/") == false){
+							current = current.getParent();
 						}
 
-					}
-
-					index++;
-
-					if (index >= data.size()){
 						break;
-					}
 
-					temp = data.get(index);
+					default:
+						
+						if (current.hasChild(dir) == false){
+							current.addChild(dir);							
+						}
+
+						current = current.getChild(dir);
+						break;
 
 				}
 
-				break;
+			} else {
 
-			default:
+				char test = line.charAt(0);
+	
+				if (Character.isDigit(test)){
 
-				// if we're here we're entering a directory
-				// cd X
+					int size = Integer.parseInt(temp);
 
-				String[] split = command.split(" ");
+					if (current.hasFile(name) == false){
+						current.addFile(name, size);
+					}
 
-				String directory = split[1];
+				} else if (test == 'd'){
 
-				if (current.hasChild(directory) == false){
-					current.addChild(directory);
-				} 
+					if (current.hasChild(name) == false){
+						current.addChild(name);
+					}
 
-				current = current.getChild(directory);
+				}
 
-				index++;
-
-				break;
+			}
 
 		}
 
-		return current;
-
 	}
 
-	private long findSizes(){
+	private long findSizes(Directory current){
 
 		long sum = 0;
 		ArrayList<Directory> directories = new ArrayList<>();
 
-		findSizeRecursive(root, directories);
+		findSizeRecursive(current, directories);
 
 		for (Directory directory : directories) {
 			sum+= directory.getSize();
@@ -203,27 +142,28 @@ public class Day7 {
 
 	private void part2(ArrayList<String> data){
 
+		Directory root = new Directory("/", null);
 		long total = 70000000;
 		long update = 30000000;
 
-		createStructure(data);
+		createStructure(data, root);
 		
 		long unused = total - root.getSize();
 		long need = update - unused;
 
-		long answer = findDeletionSize(need);
+		long answer = findDeletionSize(need, root);
 
 		System.out.println("The size of the directory to delete is: " + answer);
 
 	}
 
-	private long findDeletionSize(long need){
+	private long findDeletionSize(long need, Directory current){
 
 		ArrayList<Long> sizes = new ArrayList<>();
 		ArrayList<Directory> directories = new ArrayList<>();
 		Long sum = 0L;
 
-		findAllSizeRecursive(root, directories);
+		findAllSizeRecursive(current, directories);
 
 		for (Directory directory : directories) {
 			sizes.add(directory.getSize());
