@@ -40,42 +40,30 @@ public class Day9 {
 
 	private int parseData(ArrayList<String> data, int knots){
 
-		ArrayList<ArrayList<Point>> maps = new ArrayList<>();
+		ArrayList<Point> positions = new ArrayList<>();
 		ArrayList<Point> points = new ArrayList<>();
 
-		for (int i = 0; i < knots; i++) {
-			
-			Point temp = new Point(0, 0);
-			points.add(temp);
-
-			ArrayList<Point> tempList = new ArrayList<>();
-			tempList.add(temp);
-
-			maps.add(tempList);
-			
+		for (int i = 0; i < knots; i++){
+			points.add(new Point(0, 0));
 		}
+
 
 		for (String line : data) {
 
-			parseLine(line, maps, points);
+			parseLine(line, positions, points);
 
 		}
 
-		int number = maps.get(maps.size()-1).size();
-
-		return number;
+		return positions.size();
 
 	}
 
-	private void parseLine(String line, ArrayList<ArrayList<Point>> maps, ArrayList<Point> points){
+	private void parseLine(String line, ArrayList<Point> positions, ArrayList<Point> points){
 
 		int number = getNumber(line);
 
 		Point head = points.get(0);
 		Point tail = points.get(points.size()-1);
-
-		ArrayList<Point> headMap = maps.get(0);
-		ArrayList<Point> tailMap = maps.get(maps.size()-1);
 
 		int hX = (int)head.getX();
 		int hY = (int)head.getY();
@@ -102,15 +90,13 @@ public class Day9 {
 
 					}
 
-					tail = new Point(tX, tY);
-					head = new Point(hX, hY);
-			
-					if (headMap.indexOf(head) == -1) {
-						headMap.add(head);
-					} 
+					tail.setLocation(tX, tY);
+					head.setLocation(hX, hY);
 
-					if (tailMap.indexOf(tail) == -1){
-						tailMap.add(tail);
+					Point temp = new Point(tail.getLocation());
+
+					if (positions.indexOf(temp) == -1){
+						positions.add(temp);
 					}
 
 				}
@@ -135,15 +121,13 @@ public class Day9 {
 
 					}
 
-					tail = new Point(tX, tY);
-					head = new Point(hX, hY);
-			
-					if (headMap.indexOf(head) == -1) {
-						headMap.add(head);
-					} 
+					tail.setLocation(tX, tY);
+					head.setLocation(hX, hY);
 
-					if (tailMap.indexOf(tail) == -1){
-						tailMap.add(tail);
+					Point temp = new Point(tail.getLocation());
+
+					if (positions.indexOf(temp) == -1){
+						positions.add(temp);
 					}
 
 				}
@@ -168,15 +152,13 @@ public class Day9 {
 
 					}
 
-					tail = new Point(tX, tY);
-					head = new Point(hX, hY);
-			
-					if (headMap.indexOf(head) == -1) {
-						headMap.add(head);
-					} 
+					tail.setLocation(tX, tY);
+					head.setLocation(hX, hY);
 
-					if (tailMap.indexOf(tail) == -1){
-						tailMap.add(tail);
+					Point temp = new Point(tail.getLocation());
+
+					if (positions.indexOf(temp) == -1){
+						positions.add(temp);
 					}
 
 				}
@@ -201,15 +183,13 @@ public class Day9 {
 
 					}
 
-					tail = new Point(tX, tY);
-					head = new Point(hX, hY);
-			
-					if (headMap.indexOf(head) == -1) {
-						headMap.add(head);
-					} 
+					tail.setLocation(tX, tY);
+					head.setLocation(hX, hY);
 
-					if (tailMap.indexOf(tail) == -1){
-						tailMap.add(tail);
+					Point temp = new Point(tail.getLocation());
+
+					if (positions.indexOf(temp) == -1){
+						positions.add(temp);
 					}
 					
 				}
