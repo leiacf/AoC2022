@@ -65,11 +65,6 @@ public class Day9 {
 		Point head = points.get(0);
 		Point tail = points.get(points.size()-1);
 
-		int hX = (int)head.getX();
-		int hY = (int)head.getY();
-		int tX = (int)tail.getX();
-		int tY = (int)tail.getY();
-
 		switch (line.charAt(0)){
 
 			case 'U':
@@ -222,6 +217,9 @@ public class Day9 {
 	}
 
 	private void part2(ArrayList<String> data){
+
+		int sum = parseData(data, 10);
+		System.out.println("Number of places visited at least once: " + sum);
 
 	}
 
