@@ -162,22 +162,21 @@ public class Day10 {
 
 	private int drawPixels(int cycle, int registry, ArrayList<String[]> screen, int cycles){
 
-		int line = cycle / 40;
-		String[] current = screen.get(line);
 
 		for (int i = 0; i < cycles; i++){
 
+			int line = cycle / 40;
+			String[] current = screen.get(line);
 			int pixel = cycle % 40;
 
 			if (pixel == registry || pixel - 1 == registry || pixel + 1 == registry) {
 				current[pixel] = "#";
 			}
 
+			screen.set(line, current);
 			cycle++;
 
 		}
-
-		screen.set(line, current);
 
 		return cycle;
 
