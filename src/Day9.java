@@ -6,8 +6,6 @@ public class Day9 {
 
 	ArrayList<String> testinput;
 	ArrayList<String> input;
-	Point head = new Point(0, 0);
-	Point tail = new Point(0,0);
 
 	Day9(ArrayList<String> testinput, ArrayList<String> input) {
 
@@ -35,33 +33,49 @@ public class Day9 {
 
 	private void part1(ArrayList<String> data){
 
-		int sum = parseData(data);
-
+		int sum = parseData(data, 2);
 		System.out.println("Number of places visited at least once: " + sum);
 
 	}
 
-	private int parseData(ArrayList<String> data){
+	private int parseData(ArrayList<String> data, int knots){
 
-		HashMap<Point, Boolean> headMap = new HashMap<>();
-		HashMap<Point, Boolean> tailMap = new HashMap<>();
+		ArrayList<ArrayList<Point>> maps = new ArrayList<>();
+		ArrayList<Point> points = new ArrayList<>();
 
-		headMap.put(head, true);
-		tailMap.put(tail, true);
+		for (int i = 0; i < knots; i++) {
+			
+			Point temp = new Point(0, 0);
+			points.add(temp);
+
+			ArrayList<Point> tempList = new ArrayList<>();
+			tempList.add(temp);
+
+			maps.add(tempList);
+			
+		}
 
 		for (String line : data) {
 
-			parseLine(line, headMap, tailMap);
+			parseLine(line, maps, points);
 
 		}
 
-		return tailMap.size();
+		int number = maps.get(maps.size()-1).size();
+
+		return number;
 
 	}
 
-	private void parseLine(String line, HashMap<Point, Boolean> headMap, HashMap<Point, Boolean> tailMap){
+	private void parseLine(String line, ArrayList<ArrayList<Point>> maps, ArrayList<Point> points){
 
 		int number = getNumber(line);
+
+		Point head = points.get(0);
+		Point tail = points.get(points.size()-1);
+
+		ArrayList<Point> headMap = maps.get(0);
+		ArrayList<Point> tailMap = maps.get(maps.size()-1);
 
 		int hX = (int)head.getX();
 		int hY = (int)head.getY();
@@ -91,8 +105,13 @@ public class Day9 {
 					tail = new Point(tX, tY);
 					head = new Point(hX, hY);
 			
-					headMap.put(head, true);
-					tailMap.put(tail, true);
+					if (headMap.indexOf(head) == -1) {
+						headMap.add(head);
+					} 
+
+					if (tailMap.indexOf(tail) == -1){
+						tailMap.add(tail);
+					}
 
 				}
 
@@ -119,8 +138,13 @@ public class Day9 {
 					tail = new Point(tX, tY);
 					head = new Point(hX, hY);
 			
-					headMap.put(head, true);
-					tailMap.put(tail, true);
+					if (headMap.indexOf(head) == -1) {
+						headMap.add(head);
+					} 
+
+					if (tailMap.indexOf(tail) == -1){
+						tailMap.add(tail);
+					}
 
 				}
 			
@@ -147,8 +171,13 @@ public class Day9 {
 					tail = new Point(tX, tY);
 					head = new Point(hX, hY);
 			
-					headMap.put(head, true);
-					tailMap.put(tail, true);
+					if (headMap.indexOf(head) == -1) {
+						headMap.add(head);
+					} 
+
+					if (tailMap.indexOf(tail) == -1){
+						tailMap.add(tail);
+					}
 
 				}
 			
@@ -175,9 +204,14 @@ public class Day9 {
 					tail = new Point(tX, tY);
 					head = new Point(hX, hY);
 			
-					headMap.put(head, true);
-					tailMap.put(tail, true);
+					if (headMap.indexOf(head) == -1) {
+						headMap.add(head);
+					} 
 
+					if (tailMap.indexOf(tail) == -1){
+						tailMap.add(tail);
+					}
+					
 				}
 			
 				break;
@@ -187,6 +221,9 @@ public class Day9 {
 				break;
 
 		}
+
+		points.set(0, head);
+		points.set(points.size()-1, tail);
 
 	}
 
