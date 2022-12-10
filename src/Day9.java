@@ -76,28 +76,8 @@ public class Day9 {
 
 				for (int i = 0; i < number; i++){
 
-					hY++;
-
-					if (hY - tY >= 2){
-
-						tY++;
-
-						if (hX < tX){
-							tX--;
-						} else if (hX > tX){
-							tX++;
-						}
-
-					}
-
-					tail.setLocation(tX, tY);
-					head.setLocation(hX, hY);
-
-					Point temp = new Point(tail.getLocation());
-
-					if (positions.indexOf(temp) == -1){
-						positions.add(temp);
-					}
+					head.setLocation(head.getX(), head.getY() + 1);
+					updatePositions(positions, points);
 
 				}
 
@@ -107,29 +87,9 @@ public class Day9 {
 
 				for (int i = 0; i < number; i++){
 
-					hX--;
-
-					if (tX - hX >= 2){
-
-						tX--;
-
-						if (hY < tY){
-							tY--;
-						} else if (hY > tY){
-							tY++;
-						}
-
-					}
-
-					tail.setLocation(tX, tY);
-					head.setLocation(hX, hY);
-
-					Point temp = new Point(tail.getLocation());
-
-					if (positions.indexOf(temp) == -1){
-						positions.add(temp);
-					}
-
+					head.setLocation(head.getX() - 1, head.getY());
+					updatePositions(positions, points);
+					
 				}
 			
 				break;
@@ -138,28 +98,8 @@ public class Day9 {
 
 				for (int i = 0; i < number; i++){
 
-					hY--;
-
-					if (tY - hY >= 2){
-
-						tY--;
-
-						if (hX < tX){
-							tX--;
-						} else if (hX > tX){
-							tX++;
-						}
-
-					}
-
-					tail.setLocation(tX, tY);
-					head.setLocation(hX, hY);
-
-					Point temp = new Point(tail.getLocation());
-
-					if (positions.indexOf(temp) == -1){
-						positions.add(temp);
-					}
+					head.setLocation(head.getX(), head.getY() - 1);
+					updatePositions(positions, points);
 
 				}
 			
@@ -169,28 +109,8 @@ public class Day9 {
 
 				for (int i = 0; i < number; i++){
 
-					hX++;
-
-					if (hX - tX >= 2){
-
-						tX++;
-
-						if (hY < tY){
-							tY--;
-						} else if (hY > tY){
-							tY++;
-						}
-
-					}
-
-					tail.setLocation(tX, tY);
-					head.setLocation(hX, hY);
-
-					Point temp = new Point(tail.getLocation());
-
-					if (positions.indexOf(temp) == -1){
-						positions.add(temp);
-					}
+					head.setLocation(head.getX() + 1, head.getY());
+					updatePositions(positions, points);
 					
 				}
 			
@@ -204,6 +124,92 @@ public class Day9 {
 
 		points.set(0, head);
 		points.set(points.size()-1, tail);
+
+	}
+
+	private void updatePositions(ArrayList<Point> positions, ArrayList<Point> points){
+
+		Point first = null;
+		Point second = null;
+
+		for (int i = 0; i  < points.size()-1; i++){
+
+			first = points.get(i);
+			second = points.get(i+1);
+
+			int fY = (int) first.getY();
+			int fX = (int) first.getX();
+
+			int sY = (int) second.getY();
+			int sX = (int) second.getX();
+
+			if (fY - sY >= 2){
+
+				sY++;
+
+				if (fX < sX){
+					sX--;
+				} else if (fX > sX){
+					sX++;
+				}
+	
+				second.setLocation(sX, sY);
+			
+			} else if (sY - fY >= 2){
+
+				sY--;
+
+				if (fX < sX){
+					sX--;
+				} else if (fX > sX){
+					sX++;
+				}
+	
+				second.setLocation(sX, sY);
+
+			} else if (fX - sX >= 2){
+
+				sX++;
+
+				if (fY < sY){
+					sY--;
+				} else if (fY > sY){
+					sY++;
+				}
+
+				second.setLocation(sX, sY);
+
+			} else if (sX - fX >= 2){
+
+				fX--;
+
+				if (sX - fX >= 2){
+
+					sX--;
+
+					if (fY < sY){
+						sY--;
+					} else if (fY > sY){
+						sY++;
+					}
+
+				}
+
+				second.setLocation(sX, sY);
+
+			}
+
+			if (points.get(points.size()-1) == second){
+
+				Point temp = new Point(second.getLocation());
+
+				if (positions.indexOf(temp) == -1){
+					positions.add(temp);
+				}
+
+			}
+
+		}
 
 	}
 
