@@ -35,13 +35,7 @@ public class Day7 {
 		Directory root = new Directory("/", null);
 		createStructure(data, root);
 		
-		long totalSize = root.getSize();
 		long answerSize = findSizes(root);
-
-		// Total Size
-		System.out.println("The total size of all directories is " + totalSize);
-		
-		// Sum of sizes < 100 000
 		System.out.println("The total size of all directories with size < 100 000 is  " + answerSize);
 	
 	}
