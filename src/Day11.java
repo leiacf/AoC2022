@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.math.BigInteger;
 
 public class Day11 {
 
@@ -33,7 +34,7 @@ public class Day11 {
 	private void part1(ArrayList<String> data){
 
 		ArrayList<Monkey> monkeys = parseInput(data);
- 		long monkeybusiness = 0;
+ 		BigInteger monkeybusiness = BigInteger.valueOf(0);
 
 		for (int i = 0; i < 20; i++){
 			playRound(monkeys, true);
@@ -45,9 +46,9 @@ public class Day11 {
 
 	}
 
-	private long getMonkeybusiness(ArrayList<Monkey> monkeys) {
+	private BigInteger getMonkeybusiness(ArrayList<Monkey> monkeys) {
 
-		ArrayList<Long> monkeybusiness = new ArrayList<>();
+		ArrayList<BigInteger> monkeybusiness = new ArrayList<>();
 
 		for (Monkey monkey : monkeys) {
 			monkeybusiness.add(monkey.getInspections());
@@ -56,7 +57,10 @@ public class Day11 {
 		Collections.sort(monkeybusiness);
 		Collections.reverse(monkeybusiness);
 
-		return monkeybusiness.get(0) * monkeybusiness.get(1);
+		BigInteger first = monkeybusiness.get(0);
+		BigInteger second = monkeybusiness.get(1);
+
+		return first.multiply(second);
 	}
 
 	private void playRound(ArrayList<Monkey> monkeys, boolean part1) {
@@ -70,7 +74,7 @@ public class Day11 {
 
 			while (monkey.hasItems()){
 
-				long item = monkey.throwItem();
+				BigInteger item = monkey.throwItem();
 				to = monkey.test(item);
 				receiver = monkeys.get(to);
 
@@ -134,12 +138,14 @@ public class Day11 {
 	private void part2(ArrayList<String> data){
 
 		ArrayList<Monkey> monkeys = parseInput(data);
-		long monkeybusiness = 0L;
-
-		// PROBLEM: Item worry levels are too high, items go to the wrong monkeys :(
-		// Seriously stuck - The wrong number is too high..	
+		BigInteger monkeybusiness = BigInteger.valueOf(0);
 
 	   for (int i = 0; i < 10000; i++){
+
+			if (i % 100 == 0){
+				System.out.println("Got to " + i);
+			}
+
 		   playRound(monkeys, false);
 	   }
 

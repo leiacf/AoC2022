@@ -1,10 +1,11 @@
 import java.util.ArrayList;
+import java.math.BigInteger;
 
 public class Monkey {
     
     int number;
-    ArrayList<Long> items = new ArrayList<>();
-    long inspections = 0;
+    ArrayList<BigInteger> items = new ArrayList<>();
+    BigInteger inspections = BigInteger.valueOf(0);
     String[] operation;
     String[] test;
 
@@ -18,19 +19,19 @@ public class Monkey {
 
     }
 
-    protected void addItem(long item){
+    protected void addItem(BigInteger item){
         items.add(item);
     }
 
     private void addItems(String[] items){
 
         for (int i = 0; i < items.length; i++){
-            addItem(Long.parseUnsignedLong(items[i]));
+            addItem(new BigInteger(items[i]));
         }
 
     }
 
-    protected long throwItem(){
+    protected BigInteger throwItem(){
         return items.remove(0);
     }
 
@@ -42,38 +43,38 @@ public class Monkey {
 
         for (int i = 0; i < items.size(); i++) {
 
-            long item = items.get(i);
+            BigInteger item = items.get(i);
 
             item = updateWorryLevel(item, part1);
 
             items.set(i, item);
 
-            inspections++;
+            inspections = inspections.add(BigInteger.valueOf(1));
             
         }
 
     }
 
-    protected int test(long item){
+    protected int test(BigInteger item){
 
         int tester = Integer.parseInt(test[0]);
         int ifTrue = Integer.parseInt(test[1]);
         int ifFalse = Integer.parseInt(test[2]);
 
-        if (item %  tester == 0){
+        if (item.mod(BigInteger.valueOf(tester)).equals(BigInteger.valueOf(0))){
             return ifTrue;
         }
 
         return ifFalse;
     }
 
-    protected long getInspections(){
+    protected BigInteger getInspections(){
         return inspections;
     }
 
-    private long updateWorryLevel(long item, boolean part1){
+    private BigInteger updateWorryLevel(BigInteger item, boolean part1){
 
-        long times = 0;
+        BigInteger times = BigInteger.valueOf(0);
         String test = operation[1];
 
         switch (test) {
@@ -85,7 +86,7 @@ public class Monkey {
 
             default:
 
-                times = Long.parseLong(test);
+                times = new BigInteger(test);
                 break;
         }
         
@@ -94,19 +95,19 @@ public class Monkey {
         switch (modifier){
 
             case "+":
-                    item = item + times;
+                    item = item.add(times);
                 break;
 
             case "-":
-                    item = item - times;
+                    item = item.subtract(times);
                 break;
 
             case "*":
-                    item = item * times;
+                    item = item.multiply(times);
                 break;
 
             case "/":
-                    item = Long.divideUnsigned(item, times);
+                    item = item.divide(times);
                 break;
 
             default:
@@ -116,7 +117,7 @@ public class Monkey {
         }
 
         if (part1){
-            item = Math.floorDiv(item, 3);
+            item = item.divide(BigInteger.valueOf(3));
         }
 
         return item;
