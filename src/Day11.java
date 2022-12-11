@@ -148,9 +148,7 @@ public class Day11 {
 		int temp = allTests.get(0);
 
 		for (int i = 1; i < allTests.size(); i++){
-
 			temp = lcm(temp, allTests.get(i));
-
 		}
 		
 		return temp;
