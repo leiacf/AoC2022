@@ -99,20 +99,23 @@ public class Monkey {
         switch (modifier){
 
             case "+":
-                    item = item + times;
 
+                item = item + times;
                 break;
 
             case "-":
-                    item = item - times;
+    
+                item = item - times;
                 break;
 
             case "*":
-                    item = item * times;
+        
+                item = item * times;
                 break;
 
             case "/":
-                    item = item / times;
+            
+                item = item / times;
                 break;
 
             default:
