@@ -88,6 +88,7 @@ public class Day11 {
 	private ArrayList<Monkey> parseInput(ArrayList<String> data) {
 
 		ArrayList<Monkey> monkeys = new ArrayList<>();
+		ArrayList<Integer> allTests = new ArrayList<>();
 		
 		for  (int i = 0; i < data.size(); i +=7){
 
@@ -114,6 +115,7 @@ public class Day11 {
 
 			String[] test = new String[3];
 			test[0] = line.strip();
+			allTests.add(Integer.parseInt(test[0]));
 
 			line = data.get(i+4);
 			line = line.replace("If true: throw to monkey ", "");
@@ -131,7 +133,42 @@ public class Day11 {
 
 		}
 
+		int magicNumber = findMagicNumber(allTests);
+
+		for (Monkey monkey : monkeys) {
+			monkey.addMagicNumber(magicNumber);
+		}
+
 		return monkeys;
+
+	}
+
+	private int findMagicNumber(ArrayList<Integer> allTests) {
+
+		int temp = allTests.get(0);
+
+		for (int i = 1; i < allTests.size(); i++){
+
+			temp = lcm(temp, allTests.get(i));
+
+		}
+		
+		return temp;
+
+	}
+
+	private int lcm(int a, int b){
+		return (a / gcd(a, b)) * b;
+	}
+
+	private int gcd(int a, int b){
+
+		if (b == 0) {
+			return a;
+		}
+
+		return gcd(b, a % b);
+
 	}
 
 	private void part2(ArrayList<String> data){
@@ -140,7 +177,6 @@ public class Day11 {
 		long monkeybusiness = 0;
 
 	   for (int i = 0; i < 10000; i++){
-
 		   playRound(monkeys, false);
 	   }
 

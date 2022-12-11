@@ -7,6 +7,7 @@ public class Monkey {
     Long inspections = 0L;
     String[] operation;
     String[] test;
+    int magicNumber = 1;
 
     Monkey (int number, String[] items, String[] operation, String[] test){
         
@@ -28,6 +29,10 @@ public class Monkey {
             addItem(Long.parseLong(items[i]));
         }
 
+    }
+
+    protected void addMagicNumber(int magicNumber){
+        this.magicNumber = magicNumber;
     }
 
     protected long throwItem(){
@@ -95,6 +100,7 @@ public class Monkey {
 
             case "+":
                     item = item + times;
+
                 break;
 
             case "-":
@@ -117,11 +123,12 @@ public class Monkey {
 
         if (part1){
             item = item / 3;
+        } else {
+            item = item % magicNumber;
         }
-
+        
         return item;
 
     }
-
 
 }
