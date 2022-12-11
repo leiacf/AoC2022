@@ -25,7 +25,7 @@ public class Monkey {
     private void addItems(String[] items){
 
         for (int i = 0; i < items.length; i++){
-            addItem(Long.parseLong(items[i]));
+            addItem(Long.parseUnsignedLong(items[i]));
         }
 
     }
@@ -85,7 +85,7 @@ public class Monkey {
 
             default:
 
-                times = Integer.parseInt(test);
+                times = Long.parseLong(test);
                 break;
         }
         
@@ -106,7 +106,7 @@ public class Monkey {
                 break;
 
             case "/":
-                    item = item / times;
+                    item = Long.divideUnsigned(item, times);
                 break;
 
             default:

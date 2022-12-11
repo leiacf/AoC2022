@@ -137,6 +137,7 @@ public class Day11 {
 		long monkeybusiness = 0L;
 
 		// PROBLEM: Item worry levels are too high, items go to the wrong monkeys :(
+		// Seriously stuck - The wrong number is too high..	
 
 	   for (int i = 0; i < 10000; i++){
 		   playRound(monkeys, false);
