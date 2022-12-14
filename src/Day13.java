@@ -47,9 +47,10 @@ public class Day13 {
 		for (int i = 0; i < order.size(); i++){
 
 			boolean list = order.get(i);
-			
+
 			if (list == true){
 				sum += i+1;
+			
 			}
 
 		}
@@ -62,142 +63,138 @@ public class Day13 {
 
 		for (int i = 0; i < data.size(); i+=3){
 
-			boolean check = parseAndCompare(data.get(i), data.get(i+1));
+			boolean check = parseAndCompareAgain(data.get(i), data.get(i+1));
 			order.add(check);
-
+	
 		}
 
 	}
 
-	private boolean parseAndCompare(String firstString, String secondString){
-
+	private boolean parseAndCompareAgain(String firstString, String SecondString){
+		
 		StringBuilder first = new StringBuilder(firstString);
-		StringBuilder second = new StringBuilder(secondString);
+		StringBuilder second = new StringBuilder(SecondString);
 
-		while (first.length() > 0 && second.length() > 0){
+		int min = 0;
 
-			if (first.charAt(0) == '[') {
-				
-				if (second.charAt(0) == '['){
-
-					removeBrackets(first);
-					removeBrackets(second);
-
-				} else if (Character.isDigit(second.charAt(0))){
-
-					addBrackets(second);
-
-				} else if (second.charAt(0) == ','){
-
-					return true;
-
-				}
-			
-			} else if (second.charAt(0) == '['){
-
-				if (Character.isDigit(first.charAt(0))){
-
-					addBrackets(first);
-
-				} else if (first.charAt(0) == ','){
-
-					return false;
-
-				}
-				
-			} else {
-
-				// should have two digits, or two comma
-
-				removeComma(first);
-				removeComma(second);
-
-				if (Character.isDigit(first.charAt(0)) && Character.isDigit(second.charAt(0))){
-
-					int a = getDigit(first);
-					int b = getDigit(second);
-
-					if (a < b){
-						return true;
-					} else if (b < a){
-						return false;
-					} 
-
-				}
-
-			}
-
-		}
-
-		// got all the way here so we've been equal so far
-
-		if (first.length() >= second.length()){
-			return false;
-		}
-
-		return true;
-
-	}
-
-	private int getDigit(StringBuilder string) {
-
-		int index = 0;
-
-		while (index < string.length() && Character.isDigit(string.charAt(index))){
-			index++;
-		}
-
-		int value = Integer.parseInt(string.substring(0, index));
-		string.delete(0, index+1);
-
-		return value;
-	}
-
-	private void removeComma(StringBuilder string) {
-
-		if (string.charAt(0) == ',') { 
-			string.delete(0,1); 
-		}
-
-	}
-
-	private void addBrackets(StringBuilder string){
-
-		string.insert(0, "[");
-
-		int check = string.indexOf(",[");
-
-		if (check == -1){
-			string.append("]");
-
+		if (first.length() < second.length()){
+			min = first.length();
 		} else {
-			string.insert(check, "]");
+			min = second.length();
 		}
 
-	}
+		 for (int i = 0; i < min; i++){
 
-	private void removeBrackets(StringBuilder string){
+			char checkF = first.charAt(i);
+			char checkS = second.charAt(i);
 
-		int counter = 1;
-
-		string = string.delete(0, 1);
-
-		for (int i = 0; i < string.length(); i++){
-
-			if (string.charAt(i) == '[') { counter++; }
-			if (string.charAt(i) == ']') { counter--; }
-
-			if (counter == 0){
-
-				string.delete(i, i+1);
-				break;
-
+			if (checkF == checkS){
+				continue;
 			}
 
-		}
+			switch (checkF){
+
+				case '[':
+
+					if (Character.isDigit(checkS)){
+
+						int end = i;
+
+						while (Character.isDigit(second.charAt(end))){
+							end++;
+						}
+						
+						second.insert(end, "]");
+						second.insert(i, "[");
+						i--;
+
+					} else if (checkS == ','){
+						return false;
+					} else if (checkS == ']'){
+						return false;
+					}
+
+					break;
+
+				case ']':
+
+					if (Character.isDigit(checkS)){
+						return true;
+					} else if (checkS == ','){
+						return true;
+					} else if (checkS == '['){
+						return true;
+					}
+
+					break;
+
+				case ',':
+
+					break;
+
+				default:
+
+					// is digit
+
+					if (Character.isDigit(checkS)){
+
+						int end = i;
+
+						while (Character.isDigit(first.charAt(end))){
+							end++;
+						}
+
+						int a = Integer.parseInt(first.substring(i, end));
+
+						end = i;
+
+						while (Character.isDigit(second.charAt(end))){
+							end++;
+						}
+
+						int b = Integer.parseInt(second.substring(i, end));
+
+						if (a < b){
+							return true;
+						} else {
+							return false;
+						}
+
+					} else if (checkS == '['){
+
+						int end = i;
+
+						while (Character.isDigit(first.charAt(end))){
+							end++;
+						}
+						
+						first.insert(end, "]");
+						first.insert(i, "[");
+						i--;
+						
+						break;
+
+					} else if (checkS == ']'){
+						return false;
+
+					} else if (checkS == ','){
+						return false;
+
+					}
+
+					break;
+
+			}
+			
+		 }
+
+		 if (min == first.length()){
+			return true; 
+		 } else {
+			return false;
+		 }
 
 	}
-
 
 	private void part2(ArrayList<String> data){
 
