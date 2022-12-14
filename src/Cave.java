@@ -6,7 +6,6 @@ public class Cave {
     
     private HashMap<Point, String> structure = new HashMap<>();
     private Point entry = new Point(500, 0);
-    private int floor = 0;
  
     Cave(){
 
@@ -34,14 +33,12 @@ public class Cave {
 
     protected void addFloor(int floor, int x1, int x2){
 
-        this.floor = floor+2;
+        floor = floor+2;
 
         for (int i = x1; i <= x2; i++){
             Point temp = new Point(i, floor);
             structure.put(temp, "#");
         }
-
-
 
     }
 
@@ -103,6 +100,7 @@ public class Cave {
 
                         if (sand.equals(entry)){
                             // cant add more sand
+                            structure.put(sand, "o");
                             return false;
                         }
                         

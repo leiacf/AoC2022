@@ -84,7 +84,7 @@ public class Day14 {
 
 		}
 
-		if (part2) {cave.addFloor(maxY, minX-10, maxX+10); }
+		if (part2) {cave.addFloor(maxY, minX-2000, maxX+2000); }
 
 		return cave.sandStorm(part2);
 
