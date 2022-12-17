@@ -198,6 +198,60 @@ public class Day13 {
 
 	private void part2(ArrayList<String> data){
 
+		ArrayList<String> packets = new ArrayList<>();
+
+		String packet1 = "[[2]]";
+		String packet2 = "[[6]]";
+
+		packets.add(packet1);
+		packets.add(packet2);
+
+		parsePart2(data, packets);
+
+		int decoder  = findDecoder(packets, packet1, packet2);
+
+		System.out.println("The decoder key for the packets is: " + decoder);
+
+
+	}
+
+	private void parsePart2(ArrayList<String> data, ArrayList<String> packets){
+
+		for (String packet : data){
+
+			if (packet.equals("")){
+				continue;
+			}
+
+			boolean smaller = false;
+
+			for (int i = 0; i < packets.size(); i++){
+
+				String compare = packets.get(i);
+				 smaller = parseAndCompareAgain(packet, compare);
+
+				if (smaller){
+					packets.add(i, packet);
+					break;
+				}
+
+			}
+
+			if (smaller == false){
+				packets.add(packet);
+			}
+	
+		}
+
+	}
+
+	private int findDecoder(ArrayList<String> packets, String packet1, String packet2){
+
+		int i1 = packets.indexOf(packet1) +1;
+		int i2 = packets.indexOf(packet2) +1;
+
+		return i1*i2;
+
 	}
 
 }
