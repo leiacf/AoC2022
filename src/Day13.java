@@ -212,7 +212,6 @@ public class Day13 {
 
 		System.out.println("The decoder key for the packets is: " + decoder);
 
-
 	}
 
 	private void parsePart2(ArrayList<String> data, ArrayList<String> packets){
