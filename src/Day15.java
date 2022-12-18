@@ -21,7 +21,7 @@ public class Day15 {
 		System.out.println();
 
 		part1(testinput, 10);
-		//part1(input, 20000);
+		part1(input, 2000000);
 
 		System.out.println();
 		System.out.println("Part 2: ");
@@ -62,10 +62,45 @@ public class Day15 {
 
 			int sX = (int) s.getX();
 			int sY = (int) s.getY();
+			int bY = (int) b.getY();
 
-
-			// get nice loop here
+			int dist = Math.abs(sY - y);
 			
+			if (dist <= manhattan){
+
+				int rest = manhattan-dist;
+
+				for (int i = sX-rest; i <= sX+rest; i++){
+
+					Point temp = new Point(i, y);
+					
+					if (map.containsKey(temp) == false){
+						map.put(temp, "#");
+					}
+					
+				}
+
+				if (sY == y){
+				
+					if (map.containsKey(s) == false){
+						map.put(s, "S");
+					} else {
+						map.replace(s, "S");
+					}
+				
+				}
+
+				if (bY == y){
+				
+					if (map.containsKey(b) == false){
+						map.put(b, "B");
+					} else {
+						map.replace(b, "B");
+					}
+				
+				}
+
+			}
 
 		}	
 	}
@@ -83,10 +118,7 @@ public class Day15 {
                 sum++;
             }
 
-			System.out.println("Key: " + key.getX() + "," + key.getY() + " Value: " + value);
-
         }
-
 
 		return sum;
 	}
