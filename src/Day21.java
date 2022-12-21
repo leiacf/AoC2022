@@ -116,6 +116,7 @@ public class Day21 {
 		long end = check+10000;
 
 		// long and hard manual trial and error, so not exactly the right method..
+		// should do: solve the equation, using b as the correct answer..
 
 		for (long i = check; i < end; i++){
 
