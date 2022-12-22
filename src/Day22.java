@@ -40,21 +40,168 @@ public class Day22 {
 
 	}
 
-	private long travel(String path, Node22 start){
+	private long travel(String path, Node22 current){
 	
 		long sum = 0;
 		long row = 0;
 		long column = 0;
-		long facing = 0;
+		int facing = 0;
+		ArrayList<String> travel = splitString(path);
+		
+		for (String string : travel) {
 
-		System.out.println(path);
-		System.out.println(start.getValue());
-		System.out.println(start.getRight().getValue());
-		System.out.println(start.getLeft().getValue());
+			//System.out.println("Current string is: " + string);
+			
+			if (Character.isDigit(string.charAt(0))){
+
+				int number = Integer.parseInt(string);
+
+				//System.out.println("\t Moving " + number + " facing " + facing + " from " + current.getX() + "," + current.getY());
+
+				current = move(number, facing, current);
+
+				//System.out.println("\t Current is now: " + current.getX() + "," + current.getY());
+				//System.out.println();
+
+			} else {
+
+				//System.out.println("\t Turning " + string + " from facing " + facing);
+
+				if (string.equals("L")){
+					facing = facing + 90;
+				} else if (string.equals("R")){
+					facing = facing - 90;
+				}
+
+				if (facing < 0) {
+					facing = facing + 360;
+				} else if (facing == 360){
+					facing = 0;
+				}	
+
+				//System.out.println("\t Facing is now " + facing);
+				//System.out.println();
+				
+			}
+
+		}
+
+		if (facing == 90) { facing = 3;}
+		else if (facing == 180) { facing = 2; }
+		else if (facing == 270) { facing = 1; }
+
+		row = current.getY() + 1;
+		column = current.getX() + 1;
 
 		sum = (1000*row) + (4 * column) + (facing);
-
+		
 		return sum;
+
+	}
+
+	private Node22 move(int number, int facing, Node22 current){
+
+		switch (facing){
+
+			case 0:
+
+				for (int i = 0; i < number; i++){
+					if (current.getRight().getValue() != '#'){
+						current = current.getRight();
+					} else {
+						// hit the wall
+						break;
+					}
+
+				}
+
+				break;
+
+			case 90:
+
+				for (int i = 0; i < number; i++){
+					if (current.getUp().getValue() != '#'){
+						current = current.getUp();
+					} else {
+						// hit the wall
+						break;
+					}
+
+				}
+
+					break;
+
+			case 180:
+
+				for (int i = 0; i < number; i++){
+					if (current.getLeft().getValue() != '#'){
+						current = current.getLeft();
+					} else {
+						// hit the wall
+						break;
+					}
+
+				}
+				
+					break;
+
+			case 270:
+
+				for (int i = 0; i < number; i++){
+					if (current.getDown().getValue() != '#'){
+						current = current.getDown();
+					} else {
+						// hit the wall
+						break;
+					}
+
+				}
+				
+					break;
+
+			default:
+			
+				System.out.println("I am ERROR!");
+				System.exit(-1);
+				break;
+
+		}
+
+		return current;
+
+	}
+
+	private ArrayList<String> splitString(String path){
+
+		ArrayList<String> travel = new ArrayList<>();
+
+		for (int i = 0; i < path.length(); i++){
+
+			if (Character.isDigit(path.charAt(i))){
+
+				int start = i;
+
+				while (i < path.length() && Character.isDigit(path.charAt(i))){
+					i++;
+				}
+
+				int end = i;
+
+				String number = path.substring(start, end);
+				travel.add(number);
+				
+				i--;
+
+			} else {
+
+				String direction = path.substring(i, i+1);
+				travel.add(direction);
+
+			}
+
+		}
+
+		return travel;
 
 	}
 
@@ -82,7 +229,7 @@ public class Day22 {
 
 				if (check == '.' || check == '#'){
 
-					temp = new Node22(check, null, null, null, null);
+					temp = new Node22(check, null, null, null, null, j, i);
 					map[i][j] = temp;
 
 				}

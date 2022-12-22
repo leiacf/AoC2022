@@ -5,14 +5,26 @@ public class Node22 {
     Node22 left;
     Node22 down;
     Node22 right;
+    int x = 0;
+    int y = 0;
 
-    Node22(char value, Node22 up, Node22 left, Node22 down, Node22 right){
+    Node22(char value, Node22 up, Node22 left, Node22 down, Node22 right, int x, int y){
 
         this.value = value;
         this.up = up;
         this.left = left;
         this.down = down;
         this.right = right;
+        this.x = x;
+        this.y = y;
+    }
+
+    protected int getX(){
+        return x;
+    }
+
+    protected int getY(){
+        return y;
     }
 
     protected Node22 getUp(){
