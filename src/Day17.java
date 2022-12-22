@@ -80,13 +80,13 @@ public class Day17 {
 			tower.add(0, shape.get(i));
 		}
 		
-		index = fallToRest(tower, jetstreams, index, width, shape);
+		index = fallUntilRested(tower, jetstreams, index, width, shape);
 
 		return index;
 
 	}
 
-	private int fallToRest(ArrayList<String> tower, String jetstreams, int index, int width, ArrayList<String> shape) {
+	private int fallUntilRested(ArrayList<String> tower, String jetstreams, int index, int width, ArrayList<String> shape) {
 
 		boolean rested = false;
 
@@ -96,7 +96,7 @@ public class Day17 {
 
 		while (rested == false){
 
-			rested = fall(tower, jetstreams.charAt(index), width, shape);
+			rested = moveAndFall(tower, jetstreams.charAt(index), width, shape);
 			
 			index++;
 
@@ -106,10 +106,9 @@ public class Day17 {
 
 	}
 
-	private boolean fall(ArrayList<String> tower, char jetstream, int width, ArrayList<String> shape) {
+	private boolean moveAndFall(ArrayList<String> tower, char jetstream, int width, ArrayList<String> shape) {
 
 		boolean rested = false;
-		boolean room = true;
 
 		String check = "@";
 
@@ -117,88 +116,11 @@ public class Day17 {
 
 			case '<':
 
-				room = true;
-
-				for (int i = 0; i < shape.size(); i++){
-
-					String line = tower.get(i);
-					int index = line.indexOf(check);
-
-					if (index == 0){
-						room = false;
-					} else if (tower.get(i).charAt(index - 1) == '#'){
-						room = false;
-					}
-
-				}
-
-				if (room){
-
-					for (int i =0; i < tower.size(); i++) {
-						
-						String string = tower.get(i);
-
-						if (string.contains(check) == true){
-
-							StringBuilder temp = new StringBuilder(string);
-							
-							int add = temp.lastIndexOf(check)+1;
-							temp.insert(add, " ");
-
-							int remove = temp.indexOf(check)-1;
-							temp.delete(remove, remove+1);
-							
-							tower.set(i, temp.toString());
-							
-						}
-						
-					}
-				} else {
-					System.out.println("Can't move left!");
-				}
-
+				checkAndMoveLeft(tower, shape, check);
 				break;
 
 			case '>':
-
-				room = true;
-
-				for (int i = 0; i < shape.size(); i++){
-
-					int index = tower.get(i).lastIndexOf(check);
-					
-					if ( index == (width-1)){
-						room = false;
-					} else if (tower.get(i).charAt(index + 1) == '#'){
-						room = false;
-					}
-
-				}
-
-				if (room){
-					
-					for (int i =0; i < tower.size(); i++) {
-						
-						String string = tower.get(i);
-
-						if (string.contains(check) == true){
-
-							StringBuilder temp = new StringBuilder(string);
-
-							int remove = temp.lastIndexOf(check) + 1;
-							temp.delete(remove, remove+1);
-
-							int add = temp.indexOf(check) - 1;
-							temp.insert(add, " ");
-
-							tower.set(i, temp.toString());
-
-						}
-						
-					}
-				} else {
-					System.out.println("Can't move right!");
-				}
+				checkAndMoveRight(tower, shape, check, width);
 
 				break;
 
@@ -211,13 +133,24 @@ public class Day17 {
 
 		 
 		for (String string : tower){
-
 			System.out.println(string);
-
 		}
 		
 		System.out.println();
 		System.out.println();
+
+
+		rested = falling(tower, shape, check);
+		
+		return rested;
+
+	}
+
+	private boolean falling(ArrayList<String> tower, ArrayList<String> shape, String check){
+
+		// start falling
+
+		boolean rested = false;
 
 		int i = 0;
 		String line = tower.get(i);
@@ -229,6 +162,9 @@ public class Day17 {
 
 		i = i + shape.size();
 		line = tower.get(i);
+
+		// first check if we should rest
+		// if not, then check if there is room to fall further
 
 		if (line.contains("#") == false && line.contains("_") == false){
 			tower.remove(i);
@@ -267,8 +203,95 @@ public class Day17 {
 			}
 
 		}
-		
+
 		return rested;
+
+	}
+
+	private void checkAndMoveRight(ArrayList<String> tower, ArrayList<String> shape, String check, int width){
+		
+		boolean room = true;
+
+		for (int i = 0; i < shape.size(); i++){
+
+			int index = tower.get(i).lastIndexOf(check);
+			
+			if ( index == (width-1)){
+				room = false;
+			} else if (tower.get(i).charAt(index + 1) == '#'){
+				room = false;
+			}
+
+		}
+
+		if (room){
+			
+			for (int i =0; i < tower.size(); i++) {
+				
+				String string = tower.get(i);
+
+				if (string.contains(check) == true){
+
+					StringBuilder temp = new StringBuilder(string);
+
+					int remove = temp.lastIndexOf(check) + 1;
+					temp.delete(remove, remove+1);
+
+					int add = temp.indexOf(check) - 1;
+					temp.insert(add, " ");
+
+					tower.set(i, temp.toString());
+
+				}
+				
+			}
+		} else {
+			System.out.println("Can't move right!");
+		}
+	}
+
+	private void checkAndMoveLeft(ArrayList<String> tower, ArrayList<String> shape, String check){
+
+		boolean room = true;
+
+		for (int i = 0; i < shape.size(); i++){
+
+			String line = tower.get(i);
+			int index = line.indexOf(check);
+
+			if (index == 0){
+				room = false;
+			} else if (tower.get(i).charAt(index - 1) == '#'){
+				room = false;
+			}
+
+		}
+
+		if (room){
+
+			for (int i =0; i < tower.size(); i++) {
+				
+				String string = tower.get(i);
+
+				if (string.contains(check) == true){
+
+					StringBuilder temp = new StringBuilder(string);
+					
+					int add = temp.lastIndexOf(check)+1;
+					temp.insert(add, " ");
+
+					int remove = temp.indexOf(check)-1;
+					temp.delete(remove, remove+1);
+					
+					tower.set(i, temp.toString());
+					
+				}
+				
+			}
+			
+		} else {
+			System.out.println("Can't move left!");
+		}
 
 	}
 
