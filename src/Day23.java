@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Day23 {
 
@@ -20,7 +18,7 @@ public class Day23 {
 		System.out.println();
 
 		part1(testinput);
-		//part1(input); 4331 too high
+		part1(input);
 
 		System.out.println();
 		System.out.println("Part 2: ");
@@ -33,8 +31,9 @@ public class Day23 {
 
 	private void part1(ArrayList<String> data){
 
-		int rounds = 5;
-		HashMap<Elf, String> map = new HashMap<>();
+		int rounds = 10;
+
+		ArrayList<Elf> elves = new ArrayList<>();
 		ArrayList<String> moves = new ArrayList<>();
 			
 		moves.add("N");
@@ -42,26 +41,25 @@ public class Day23 {
 		moves.add("W");
 		moves.add("E");
 
-		parseData(map, data);
+		parseData(elves, data);
 
-		System.out.println("== Initial State ==");
-
-		printMap(map, -2, 10, -3, 11);
+		//System.out.println("== Initial State ==");
+		//printMap(map, -2, 10, -3, 11);
 
 		for (int i = 0; i < rounds; i++){
-			round(map, moves);
-			System.out.println("== End of Round " + (i+1) + " ==");
-			printMap(map, -2, 10, -3, 11);
+			round(elves, moves);
+			//System.out.println("== End of Round " + (i+1) + " ==");
+			//printMap(map, -2, 10, -3, 11);
 
 		}
 
-		int empty = getEmpty(map);
+		int empty = getEmpty(elves);
 
 		System.out.println("The number of empty slots are: " + empty);
 
 	}
 
-	private void parseData(HashMap<Elf, String> map, ArrayList<String> data){
+	private void parseData(ArrayList<Elf> elves, ArrayList<String> data){
 
 		for (int i = 0; i < data.size(); i ++){
 			
@@ -71,7 +69,7 @@ public class Day23 {
 
 				if (line.charAt(j) == '#'){
 					Elf elf = new Elf(j, i);
-					map.put(elf, "#");
+					elves.add(elf);
 				}
 
 			}
@@ -79,15 +77,13 @@ public class Day23 {
 
 	}
 
-	private void round(HashMap<Elf, String> map, ArrayList<String> moves){
+	private boolean round(ArrayList<Elf> elves, ArrayList<String> moves){
 
 		// first half
 
-		for(Map.Entry<Elf, String> elf : map.entrySet()) {
-            
-            Elf current = elf.getKey();
-
-			ArrayList<String> adjacent = checkAdjacent(current, map);
+		for(Elf current : elves) {
+ 
+			ArrayList<String> adjacent = checkAdjacent(current, elves);
 			
 			for (String move : moves){
 
@@ -103,7 +99,7 @@ public class Day23 {
 
 			}
 
-			System.out.println("Elf at " + current.getY() + "," + current.getX() + " Proposed to move: " + current.getPropose());
+			//System.out.println("Elf at " + current.getY() + "," + current.getX() + " Proposed to move: " + current.getPropose());
 
         }
 
@@ -112,9 +108,8 @@ public class Day23 {
 
 		// second half
 
-		for(Map.Entry<Elf, String> elf : map.entrySet()) {
-            
-            Elf current = elf.getKey();
+		for(Elf current : elves){
+
 			String cProposed = current.getPropose();
 			int cPX = 0;
 			int cPY = 0;
@@ -128,7 +123,7 @@ public class Day23 {
 					break;
 
 				case "W":
-					cPX = cX + 1;
+					cPX = cX-1;
 					cPY = cY;
 					break;
 
@@ -138,7 +133,7 @@ public class Day23 {
 					break;
 
 				case "E":
-					cPX = cX - 1;
+					cPX = cX+1;
 					cPY = cY;
 					break;
 
@@ -146,9 +141,7 @@ public class Day23 {
 					break;
 			}
 
-			for(Map.Entry<Elf, String> other : map.entrySet()) {
-            
-				Elf test = other.getKey();
+			for (Elf test : elves) {
 
 				if (test == current){
 					continue;
@@ -162,13 +155,14 @@ public class Day23 {
 				int tY = test.getY();
 
 				switch (tProposed){
+
 					case "N":
 						tPX = tX;
 						tPY = tY-1;
 						break;
 	
 					case "W":
-						tPX = tX + 1;
+						tPX = tX-1;
 						tPY = tY;
 						break;
 	
@@ -178,27 +172,31 @@ public class Day23 {
 						break;
 	
 					case "E":
-						tPX = tX - 1;
+						tPX = tX+1;
 						tPY = tY;
 						break;
 	
 					default:
 						break;
+
 				}
 
 				if (tPX == cPX && tPY == cPY){
 
 					current.setMove(false);
 					test.setMove(false);
+
 				}
 
 			}
 
         }
 
-		for(Map.Entry<Elf, String> elf : map.entrySet()) {
-            
-			Elf current = elf.getKey();
+		if (moving(elves) == false){
+			return false;
+		}
+
+		for (Elf current : elves) {
 
 			if (current.canMove){
 
@@ -216,7 +214,7 @@ public class Day23 {
 						break;
 
 					case "W":
-						cPX = cX + 1;
+						cPX = cX-1;
 						cPY = cY;
 						break;
 
@@ -226,7 +224,7 @@ public class Day23 {
 						break;
 
 					case "E":
-						cPX = cX - 1;
+						cPX = cX+1;
 						cPY = cY;
 						break;
 
@@ -243,9 +241,27 @@ public class Day23 {
 
 		}
 
+		return true;
 	}
 
-	private ArrayList<String> checkAdjacent(Elf current, HashMap<Elf, String> map){
+	private boolean moving(ArrayList<Elf> elves){
+
+		boolean moving = false;
+
+		for(Elf current : elves){
+
+			if (current.canMove()){
+				moving = true;
+				break;
+			}
+
+		}	
+
+		return moving;
+
+	}
+
+	private ArrayList<String> checkAdjacent(Elf current, ArrayList<Elf> elves){
 
 		ArrayList<String> adjacent = new ArrayList<>();
 
@@ -254,7 +270,7 @@ public class Day23 {
 
 		ArrayList<Integer> northeast = new ArrayList<>();
 		northeast.add(cY-1);
-		northeast.add(cX-1);
+		northeast.add(cX+1);
 
 		ArrayList<Integer> north = new ArrayList<>();
 		north.add(cY-1);
@@ -262,15 +278,15 @@ public class Day23 {
 
 		ArrayList<Integer> northwest = new ArrayList<>();
 		northwest.add(cY-1);
-		northwest.add(cX+1);
+		northwest.add(cX-1);
 
 		ArrayList<Integer> west = new ArrayList<>();
 		west.add(cY);
-		west.add(cX+1);
+		west.add(cX-1);
 
 		ArrayList<Integer> southwest = new ArrayList<>();
 		southwest.add(cY+1);
-		southwest.add(cX+1);
+		southwest.add(cX-1);
 
 		ArrayList<Integer> south = new ArrayList<>();
 		south.add(cY+1);
@@ -278,15 +294,13 @@ public class Day23 {
 
 		ArrayList<Integer> southeast = new ArrayList<>();
 		southeast.add(cY+1);
-		southeast.add(cX-1);
+		southeast.add(cX+1);
 
 		ArrayList<Integer> east = new ArrayList<>();
 		east.add(cY);
-		east.add(cX-1);
+		east.add(cX+1);
 
-		for(Map.Entry<Elf, String> elf : map.entrySet()) {
-            
-            Elf test = elf.getKey();
+		for (Elf test : elves){
 
 			if (current == test){
 				continue;
@@ -379,16 +393,14 @@ public class Day23 {
 
 	}
 
-	private int getEmpty(HashMap<Elf, String> map){
+	private int getEmpty(ArrayList<Elf> elves){
 
 		int yMIN = Integer.MAX_VALUE;
 		int yMAX = Integer.MIN_VALUE;
 		int xMIN = Integer.MAX_VALUE;
 		int xMAX = Integer.MIN_VALUE;
 
-		for(Map.Entry<Elf, String> elf : map.entrySet()) {
-            
-			Elf current = elf.getKey();
+		for(Elf current : elves){
 
 			int cX = current.getX();
 			int cY = current.getY();
@@ -423,16 +435,42 @@ public class Day23 {
 		}
 		
 		int total = x*y;
-		int result = total - map.size();
+		int result = total - elves.size();
 		
 		return result;
 	}
 
 	private void part2(ArrayList<String> data){
 
+		int rounds = 0;
+		boolean moving = true;
+		ArrayList<String> moves = new ArrayList<>();
+		ArrayList<Elf> elves = new ArrayList<>();
+		
+		moves.add("N");
+		moves.add("S");
+		moves.add("W");
+		moves.add("E");
+	
+		parseData(elves, data);
+	
+			//System.out.println("== Initial State ==");
+			//printMap(map, -2, 10, -3, 11);
+	
+		while (moving){
+			rounds++;
+			moving = round(elves, moves);
+			
+				//System.out.println("== End of Round " + (i+1) + " ==");
+				//printMap(map, -2, 10, -3, 11);
+	
+		}
+	
+		System.out.println("The number of rounds is: " + rounds);
+
 	}
 
-	private void printMap(HashMap<Elf, String> map, int yMIN, int yMAX, int xMIN, int xMAX) {
+	private void printMap(ArrayList<Elf> elves, int yMIN, int yMAX, int xMIN, int xMAX) {
 
 		int xOffset = 0;
 		int yOffset = 0;
@@ -459,12 +497,9 @@ public class Day23 {
 
 		}
 
-		for(Map.Entry<Elf, String> elf : map.entrySet()) {
-
-			Elf current = elf.getKey();
-			String value = elf.getValue();
-
-			plot[current.getY()+yOffset][current.getX()+xOffset] = value;
+		for(Elf current : elves){
+			
+			plot[current.getY()+yOffset][current.getX()+xOffset] = "#";
 
 		}
 

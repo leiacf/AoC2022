@@ -3,7 +3,7 @@ public class Elf {
     
     private int x = 0;
     private int y = 0;
-    String propose = "";
+    String propose = " ";
     boolean canMove = true;
 
     Elf(int x, int y){
