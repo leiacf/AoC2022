@@ -85,6 +85,12 @@ public class Day23 {
 				current.setProposedLocation(Integer.MAX_VALUE, Integer.MAX_VALUE);
 				current.setMove(false);
 	
+			} else if (adjacent.size() == 4){
+
+				current.setProposed(" ");
+				current.setProposedLocation(Integer.MAX_VALUE, Integer.MAX_VALUE);
+				current.setMove(false);
+			
 			} else {
 			
 				for (String move : moves){
@@ -96,7 +102,8 @@ public class Day23 {
 
 				}
 
-			}	
+			}
+
         }
 
 		String move = moves.remove(0);
@@ -205,8 +212,6 @@ public class Day23 {
 		int cX = current.getX();
 		int cY = current.getY();
 
-		//System.out.println("Checking elf at: " + cY + "," + cX);
-
 		for (Elf test : elves){
 
 			if (current == test){
@@ -216,12 +221,8 @@ public class Day23 {
 			int tX = test.getX();
 			int tY = test.getY();
 
-		//	System.out.println("\tChecking elf at: " + tY + "," + tX);
-
-
 			// NW N NE
-
-			if ( tY == (cY-1) ){
+			if (tY == (cY-1) ){
 
 				if ( tX == (cX-1) ){
 
@@ -257,7 +258,6 @@ public class Day23 {
 			}
 
 			// SW S SE
-
 			if ( tY == (cY+1) ){
 
 				if ( tX == (cX-1) ){
@@ -285,6 +285,7 @@ public class Day23 {
 				}
 				
 				if (tX == cX){
+
 					if (adjacent.contains("S") == false){
 						adjacent.add("S");
 					} 
@@ -311,15 +312,6 @@ public class Day23 {
 			}
 		
         }
-
-		/*System.out.println("\tAdjacent contains: ");
-
-		for (String string : adjacent){
-
-				System.out.println("\t\t" + string);
-
-		}
-		*/
 
 		return adjacent;
 
@@ -353,9 +345,6 @@ public class Day23 {
 				yMAX = cY;
 			}
 
-
-			//System.out.println("Elf at: " + cY + "," + cX);
-
 		}
 
 		int y = 1;
@@ -368,8 +357,6 @@ public class Day23 {
 		for (int i = yMIN; i < yMAX; i++){
 			y++;
 		}
-		
-		//System.out.println("xMIN: " + xMIN + " xMAX: " + xMAX + " yMIN: " + yMIN + " yMAX: " + yMAX);
 
 		int total = x*y;
 		int result = total - elves.size();
@@ -392,57 +379,12 @@ public class Day23 {
 		parseData(elves, data);
 
 		while (moving){
-
 			rounds++;
 			moving = round(elves, moves);
-	
 		}
 	
 		System.out.println("The first round without movement is: " + rounds);
 
 	}
-	
-	private void printMap(ArrayList<Elf> elves)
-	{
-	  long minX = 0, minY = 0, maxX = 0, maxY = 0;
-	  for(Elf current : elves)
-	  {
-		minX = Math.min(minX, current.getX());
-		minY = Math.min(minY, current.getY());
-		maxX = Math.max(maxX, current.getX());
-		maxY = Math.max(maxY, current.getY());
-	  }
-  
-	  System.out.println("Bounds " + minX + "," + minY);
-  
-	  for (long y = minY; y <= maxY; y++)
-	  {
-		for (long x = minX; x <= maxX; x++)      
-		{
-		  if (contains(elves, x, y))
-		  {
-			System.out.print('#');
-		  }
-		  else
-		  {
-			System.out.print('.');
-		  }
-		}
-		System.out.println("");
-	  }
-	}
-
-	boolean contains(ArrayList<Elf> elves, long x, long y)
-  {
-    for(Elf current : elves)
-    {
-      if (current.getX() == x && current.getY() == y)
-      {
-        return true;
-      }
-    }
-    return false;
-  }
-
 
 }
