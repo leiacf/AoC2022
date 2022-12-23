@@ -42,7 +42,7 @@ public class Day23 {
 		moves.add("E");
 
 		parseData(elves, data);
-
+	
 		for (int i = 0; i < rounds; i++){
 			round(elves, moves);
 		}
@@ -78,22 +78,25 @@ public class Day23 {
 		for(Elf current : elves) {
  
 			ArrayList<String> adjacent = checkAdjacent(current, elves);
+
+			if (adjacent.isEmpty()){
+	
+				current.setProposed(" ");
+				current.setProposedLocation(Integer.MAX_VALUE, Integer.MAX_VALUE);
+				current.setMove(false);
+	
+			} else {
 			
-			for (String move : moves){
+				for (String move : moves){
 
-				if (adjacent.isEmpty()){
-					current.setPropose(" ");
-					current.setMove(false);
-					break;
+					if (adjacent.contains(move) == false){
+						propose(current, move);
+						break;
+					}
+
 				}
 
-				if (adjacent.contains(move) == false){
-					current.setPropose(move);
-					break;
-				}
-
-			}
-
+			}	
         }
 
 		String move = moves.remove(0);
@@ -103,91 +106,25 @@ public class Day23 {
 
 		for(Elf current : elves){
 
-			if (current.canMove()){
+			int cX = current.getPX();
+			int cY = current.getPY();
 
-				String cProposed = current.getPropose();
-				int cPX = 0;
-				int cPY = 0;
-				int cX = current.getX();
-				int cY = current.getY();
+			for (Elf test : elves) {
 
-				switch (cProposed){
-					case "N":
-						cPX = cX;
-						cPY = cY-1;
-						break;
-
-					case "W":
-						cPX = cX-1;
-						cPY = cY;
-						break;
-
-					case "S":
-						cPX = cX;
-						cPY = cY+1;
-						break;
-
-					case "E":
-						cPX = cX+1;
-						cPY = cY;
-						break;
-
-					default:
-						break;
+				if (test == current){
+					continue;
 				}
 
-				for (Elf test : elves) {
+				if ((cX == test.getPX()) && (cY == test.getPY())){
 
-					if (test == current){
-						continue;
-					}
-
-					String tProposed = test.getPropose();
-
-					int tPX = 0;
-					int tPY = 0;
-					int tX = test.getX();
-					int tY = test.getY();
-
-					switch (tProposed){
-
-						case "N":
-							tPX = tX;
-							tPY = tY-1;
-							break;
-		
-						case "W":
-							tPX = tX-1;
-							tPY = tY;
-							break;
-		
-						case "S":
-							tPX = tX;
-							tPY = tY+1;
-							break;
-		
-						case "E":
-							tPX = tX+1;
-							tPY = tY;
-							break;
-		
-						default:
-							break;
-
-					}
-
-					if (tPX == cPX && tPY == cPY){
-
-						current.setMove(false);
-						test.setMove(false);
-
-					}
+					current.setMove(false);
+					test.setMove(false);
 
 				}
 
 			}
 
-        }
+		}
 
 		if (moving(elves) == false){
 			return false;
@@ -195,50 +132,53 @@ public class Day23 {
 
 		for (Elf current : elves) {
 
-			if (current.canMove){
-
-				String cProposed = current.getPropose();
-
-				int cPX = 0;
-				int cPY = 0;
-				int cX = current.getX();
-				int cY = current.getY();
-
-				switch (cProposed){
-					case "N":
-						cPX = cX;
-						cPY = cY-1;
-						break;
-
-					case "W":
-						cPX = cX-1;
-						cPY = cY;
-						break;
-
-					case "S":
-						cPX = cX;
-						cPY = cY+1;
-						break;
-
-					case "E":
-						cPX = cX+1;
-						cPY = cY;
-						break;
-
-					default:
-						break;
-				}
-
-				current.setLocation(cPX, cPY);
-				
+			if (current.canMove()){
+				current.move();
 			}
-			
-			current.setPropose(" ");
+
 			current.setMove(true);
 
 		}
 
 		return true;
+	}
+
+	private void propose(Elf current, String move){
+
+		int cPX = 0;
+		int cPY = 0;
+		int cX = current.getX();
+		int cY = current.getY();
+
+		switch (move){
+			case "N":
+				cPX = cX;
+				cPY = cY-1;
+				break;
+
+			case "W":
+				cPX = cX-1;
+				cPY = cY;
+				break;
+
+			case "S":
+				cPX = cX;
+				cPY = cY+1;
+				break;
+
+			case "E":
+				cPX = cX+1;
+				cPY = cY;
+				break;
+
+			default:
+				break;
+		}
+
+		current.setProposed(move);
+		current.setProposedLocation(cPX, cPY);
+		current.setMove(true);
+
 	}
 
 	private boolean moving(ArrayList<Elf> elves){
@@ -265,37 +205,7 @@ public class Day23 {
 		int cX = current.getX();
 		int cY = current.getY();
 
-		ArrayList<Integer> northeast = new ArrayList<>();
-		northeast.add(cY-1);
-		northeast.add(cX+1);
-
-		ArrayList<Integer> north = new ArrayList<>();
-		north.add(cY-1);
-		north.add(cX);
-
-		ArrayList<Integer> northwest = new ArrayList<>();
-		northwest.add(cY-1);
-		northwest.add(cX-1);
-
-		ArrayList<Integer> west = new ArrayList<>();
-		west.add(cY);
-		west.add(cX-1);
-
-		ArrayList<Integer> southwest = new ArrayList<>();
-		southwest.add(cY+1);
-		southwest.add(cX-1);
-
-		ArrayList<Integer> south = new ArrayList<>();
-		south.add(cY+1);
-		south.add(cX);
-
-		ArrayList<Integer> southeast = new ArrayList<>();
-		southeast.add(cY+1);
-		southeast.add(cX+1);
-
-		ArrayList<Integer> east = new ArrayList<>();
-		east.add(cY);
-		east.add(cX+1);
+		//System.out.println("Checking elf at: " + cY + "," + cX);
 
 		for (Elf test : elves){
 
@@ -306,85 +216,110 @@ public class Day23 {
 			int tX = test.getX();
 			int tY = test.getY();
 
-			// NE
+		//	System.out.println("\tChecking elf at: " + tY + "," + tX);
 
-			if (northeast.get(0) == tY && northeast.get(1) == tX){
-				adjacent.add("N");
-				adjacent.add("E");
-			}
 
-			// N
+			// NW N NE
 
-			if (adjacent.contains("N") == false){
+			if ( tY == (cY-1) ){
 
-				if (north.get(0) == tY && north.get(1) == tX){
-					adjacent.add("N");
+				if ( tX == (cX-1) ){
+
+					if (adjacent.contains("W") == false){
+						adjacent.add("W");
+					}
+
+					if (adjacent.contains("N") == false){
+						adjacent.add("N");
+					}
+										
 				}
+				
+				if ( tX == (cX+1) ){
+
+					if (adjacent.contains("E") == false){
+						adjacent.add("E");
+					}
+
+					if (adjacent.contains("N") == false){
+						adjacent.add("N");
+					} 
+				}
+				
+				if (tX == cX){
+
+					if (adjacent.contains("N") == false){
+						adjacent.add("N");
+					} 
+
+				}
+
 			}
 
-			// NW
-			
-			if (northwest.get(0) == tY && northwest.get(1) == tX){
-			
-				if (adjacent.contains("N") == false){
-					adjacent.add("N");
+			// SW S SE
+
+			if ( tY == (cY+1) ){
+
+				if ( tX == (cX-1) ){
+
+					if (adjacent.contains("W") == false){
+						adjacent.add("W");
+					}
+
+					if (adjacent.contains("S") == false){
+						adjacent.add("S");
+					}
+										
+				}
+				
+				if ( tX == (cX+1) ){
+
+					if (adjacent.contains("E") == false){
+						adjacent.add("E");
+					}
+
+					if (adjacent.contains("S") == false){
+						adjacent.add("S");
+					} 
+
+				}
+				
+				if (tX == cX){
+					if (adjacent.contains("S") == false){
+						adjacent.add("S");
+					} 
+
 				}	
-				
-				adjacent.add("W");
 
 			}
 
-			// W
+			// W E 
+			if ( tY == cY ){
 
-			if (adjacent.contains("W") == false){
-
-				if (west.get(0) == tY && west.get(1) == tX){
-					adjacent.add("W");
+				if ( tX == (cX-1) ){
+					if (adjacent.contains("W") == false){
+						adjacent.add("W");
+					} 
 				}
-			}			
-
-			// SW
-
-			if (southwest.get(0) == tY && southwest.get(1) == tX){
 				
-				if (adjacent.contains("W") == false){
-					adjacent.add("W");
+				if ( tX == (cX+1) ){
+					if (adjacent.contains("E") == false){
+						adjacent.add("E");
+					}
 				}	
-				
-				adjacent.add("S");
 
-			}
-
-			// S
-
-			if (adjacent.contains("S") == false){
-				
-				if (south.get(0) == tY && south.get(1) == tX){
-					adjacent.add("S");
-				}
-			}
-
-			// SE
-
-			if (southeast.get(0) == tY && southeast.get(1) == tX){
-				
-				if (adjacent.contains("S") == false){
-					adjacent.add("S");
-				}	
-				
-				adjacent.add("E");
-
-			}
-
-			// E
-
-			if (adjacent.contains("E") == false){
-				if (east.get(0) == tY && east.get(1) == tX){
-					adjacent.add("E");
-				}
 			}
 		
         }
+
+		/*System.out.println("\tAdjacent contains: ");
+
+		for (String string : adjacent){
+
+				System.out.println("\t\t" + string);
+
+		}
+		*/
 
 		return adjacent;
 
@@ -418,6 +353,9 @@ public class Day23 {
 				yMAX = cY;
 			}
 
+
+			//System.out.println("Elf at: " + cY + "," + cX);
+
 		}
 
 		int y = 1;
@@ -431,6 +369,8 @@ public class Day23 {
 			y++;
 		}
 		
+		//System.out.println("xMIN: " + xMIN + " xMAX: " + xMAX + " yMIN: " + yMIN + " yMAX: " + yMAX);
+
 		int total = x*y;
 		int result = total - elves.size();
 		
@@ -462,4 +402,47 @@ public class Day23 {
 
 	}
 	
+	private void printMap(ArrayList<Elf> elves)
+	{
+	  long minX = 0, minY = 0, maxX = 0, maxY = 0;
+	  for(Elf current : elves)
+	  {
+		minX = Math.min(minX, current.getX());
+		minY = Math.min(minY, current.getY());
+		maxX = Math.max(maxX, current.getX());
+		maxY = Math.max(maxY, current.getY());
+	  }
+  
+	  System.out.println("Bounds " + minX + "," + minY);
+  
+	  for (long y = minY; y <= maxY; y++)
+	  {
+		for (long x = minX; x <= maxX; x++)      
+		{
+		  if (contains(elves, x, y))
+		  {
+			System.out.print('#');
+		  }
+		  else
+		  {
+			System.out.print('.');
+		  }
+		}
+		System.out.println("");
+	  }
+	}
+
+	boolean contains(ArrayList<Elf> elves, long x, long y)
+  {
+    for(Elf current : elves)
+    {
+      if (current.getX() == x && current.getY() == y)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
 }
