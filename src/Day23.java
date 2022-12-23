@@ -83,6 +83,7 @@ public class Day23 {
 
 				if (adjacent.isEmpty()){
 					current.setPropose(" ");
+					current.setMove(false);
 					break;
 				}
 
@@ -102,81 +103,85 @@ public class Day23 {
 
 		for(Elf current : elves){
 
-			String cProposed = current.getPropose();
-			int cPX = 0;
-			int cPY = 0;
-			int cX = current.getX();
-			int cY = current.getY();
+			if (current.canMove()){
 
-			switch (cProposed){
-				case "N":
-					cPX = cX;
-					cPY = cY-1;
-					break;
+				String cProposed = current.getPropose();
+				int cPX = 0;
+				int cPY = 0;
+				int cX = current.getX();
+				int cY = current.getY();
 
-				case "W":
-					cPX = cX-1;
-					cPY = cY;
-					break;
-
-				case "S":
-					cPX = cX;
-					cPY = cY+1;
-					break;
-
-				case "E":
-					cPX = cX+1;
-					cPY = cY;
-					break;
-
-				default:
-					break;
-			}
-
-			for (Elf test : elves) {
-
-				if (test == current){
-					continue;
-				}
-
-				String tProposed = test.getPropose();
-
-				int tPX = 0;
-				int tPY = 0;
-				int tX = test.getX();
-				int tY = test.getY();
-
-				switch (tProposed){
-
+				switch (cProposed){
 					case "N":
-						tPX = tX;
-						tPY = tY-1;
+						cPX = cX;
+						cPY = cY-1;
 						break;
-	
+
 					case "W":
-						tPX = tX-1;
-						tPY = tY;
+						cPX = cX-1;
+						cPY = cY;
 						break;
-	
+
 					case "S":
-						tPX = tX;
-						tPY = tY+1;
+						cPX = cX;
+						cPY = cY+1;
 						break;
-	
+
 					case "E":
-						tPX = tX+1;
-						tPY = tY;
+						cPX = cX+1;
+						cPY = cY;
 						break;
-	
+
 					default:
 						break;
-
 				}
 
-				if (tPX == cPX && tPY == cPY){
+				for (Elf test : elves) {
 
-					current.setMove(false);
-					test.setMove(false);
+					if (test == current){
+						continue;
+					}
+
+					String tProposed = test.getPropose();
+
+					int tPX = 0;
+					int tPY = 0;
+					int tX = test.getX();
+					int tY = test.getY();
+
+					switch (tProposed){
+
+						case "N":
+							tPX = tX;
+							tPY = tY-1;
+							break;
+		
+						case "W":
+							tPX = tX-1;
+							tPY = tY;
+							break;
+		
+						case "S":
+							tPX = tX;
+							tPY = tY+1;
+							break;
+		
+						case "E":
+							tPX = tX+1;
+							tPY = tY;
+							break;
+		
+						default:
+							break;
+
+					}
+
+					if (tPX == cPX && tPY == cPY){
+
+						current.setMove(false);
+						test.setMove(false);
+
+					}
 
 				}
 
