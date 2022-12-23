@@ -43,14 +43,8 @@ public class Day23 {
 
 		parseData(elves, data);
 
-		//System.out.println("== Initial State ==");
-		//printMap(map, -2, 10, -3, 11);
-
 		for (int i = 0; i < rounds; i++){
 			round(elves, moves);
-			//System.out.println("== End of Round " + (i+1) + " ==");
-			//printMap(map, -2, 10, -3, 11);
-
 		}
 
 		int empty = getEmpty(elves);
@@ -98,8 +92,6 @@ public class Day23 {
 				}
 
 			}
-
-			//System.out.println("Elf at " + current.getY() + "," + current.getX() + " Proposed to move: " + current.getPropose());
 
         }
 
@@ -453,70 +445,16 @@ public class Day23 {
 		moves.add("E");
 	
 		parseData(elves, data);
-	
-			//System.out.println("== Initial State ==");
-			//printMap(map, -2, 10, -3, 11);
-	
+
 		while (moving){
+
 			rounds++;
 			moving = round(elves, moves);
-			
-				//System.out.println("== End of Round " + (i+1) + " ==");
-				//printMap(map, -2, 10, -3, 11);
 	
 		}
 	
-		System.out.println("The number of rounds is: " + rounds);
+		System.out.println("The first round without movement is: " + rounds);
 
 	}
-
-	private void printMap(ArrayList<Elf> elves, int yMIN, int yMAX, int xMIN, int xMAX) {
-
-		int xOffset = 0;
-		int yOffset = 0;
-
-		if (yMIN < 0){
-			yOffset = Math.abs(yMIN);
-			yMAX += yOffset;
-		}
-
-		if (xMIN < 0){
-			xOffset = Math.abs(xMIN);			
-			xMAX += xOffset;
-		}
-
-		String[][] plot = new String[yMAX][xMAX];
-
-		for (int i = 0; i < yMAX; i++){
-
-			for (int j = 0; j < xMAX; j++){
-
-				plot[i][j] = ".";
-
-			}
-
-		}
-
-		for(Elf current : elves){
-			
-			plot[current.getY()+yOffset][current.getX()+xOffset] = "#";
-
-		}
-
-		for (int i = 0; i < yMAX; i++){
-
-			for (int j = 0; j < xMAX; j++){
-
-				System.out.print(plot[i][j]);
-
-			}
-
-			System.out.println();
-
-		}
-
-		System.out.println();
-
-	}
-
+	
 }
