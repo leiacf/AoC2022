@@ -24,8 +24,8 @@ public class Day22 {
 		System.out.println("Part 2: ");
 		System.out.println();
 
-		part2(testinput);
-		part2(input);
+		part2(testinput, 4);
+		part2(input, 50);
 
 	}
 
@@ -352,7 +352,50 @@ public class Day22 {
 		return start;
 	}
 
-	private void part2(ArrayList<String> data){
+	private void part2(ArrayList<String> data, int size){
+
+		Node22 start = parseCubeData(data, size);
+		String path = data.get(data.size()-1);
+		
+		long sum = travel(path, start);
+
+		System.out.println("The final password is: " + sum);
+
+	}
+
+	private Node22 parseCubeData(ArrayList<String> data, int size){
+		
+		Node22[][] one 		= new Node22[size][size];
+		Node22[][] two 		= new Node22[size][size];
+		Node22[][] three 	= new Node22[size][size];
+		Node22[][] four 	= new Node22[size][size];
+		Node22[][] five 	= new Node22[size][size];
+		Node22[][] six 		= new Node22[size][size];
+
+		// identify sections (from the top)
+
+		for (int i = 0; i < data.size()-2; i++){
+
+			String line = data.get(i);
+			int maxX = line.length();
+			int possibleX = maxX / size;
+
+			System.out.println("Possible sections in this part: " + possibleX);
+
+			for (int j = 0; j < maxX; j++){
+
+			}
+			
+
+		}
+		
+		// fill section maps
+
+		// connect section maps (use cubemap)
+
+		// move around -> pay attention to directional changes
+
+		return one[0][0];
 
 	}
 
