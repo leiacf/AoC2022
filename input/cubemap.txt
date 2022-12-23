@@ -1,0 +1,35 @@
+
+		1
+	2	3	4
+		5
+		6
+		
+1 up 	6 down 			(same dir)
+1 left 	2 up 			(change dir 90+)
+1 right 4 up			(change dir 90-)
+1 down 	3 up			(same dir)
+
+2 up 	1 left 			(change dir 90-)
+2 left	6 left flipped 	(same dir)
+2 right	3 left 			(same dir)
+2 down	5 left flipped	(change dir 90+)
+
+3 up	1 down			(same dir)
+3 left	2 right			(same dir)
+3 right	4 left			(same dir)
+3 down	5 up			(same dir)
+
+4 up	1 right			(change dir 90+)
+4 left	3 right			(same dir)
+4 right	6 right flipped	(same dir)
+4 down	5 right flipped (change dir 90-)
+
+5 up	3 down			(same dir)
+5 left	2 down flipped	(change dir 90-)
+5 right	4 down flipped	(change dir 90+)
+5 down	6 up			(same dir)
+
+6 up	5 down			(same dir)
+6 left	2 left flipped	(same dir)
+6 right 4 right flipped	(same dir)
+6 down 	1 up 			(same dir)

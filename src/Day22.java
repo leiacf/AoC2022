@@ -372,17 +372,31 @@ public class Day22 {
 		Node22[][] five 	= new Node22[size][size];
 		Node22[][] six 		= new Node22[size][size];
 
+		ArrayList<Node22[][]> maps = new ArrayList<>();
+		
+		maps.add(one);
+		maps.add(two);
+		maps.add(three);
+		maps.add(four);
+		maps.add(five);
+		maps.add(six);
+
 		// identify sections (from the top)
 
 		for (int i = 0; i < data.size()-2; i++){
 
 			String line = data.get(i);
-			int maxX = line.length();
-			int possibleX = maxX / size;
 
-			System.out.println("Possible sections in this part: " + possibleX);
+			for (int j = 0; j < line.length(); j++){
 
-			for (int j = 0; j < maxX; j++){
+				if (line.charAt(j) == ' '){
+					j+= size;
+				} else {
+					// has a section, but which one?!
+
+					
+				}
+				
 
 			}
 			
