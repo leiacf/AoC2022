@@ -208,16 +208,23 @@ public class Day17 {
 	private void checkAndMoveRight(ArrayList<String> tower, ArrayList<String> shape, String check, int width){
 		
 		boolean room = true;
+		int i = 0;
+		String top = tower.get(i);
 
-		for (int i = 0; i < shape.size(); i++){
+		while (top.contains(check) == false){
+			i++;
+			top = tower.get(i);
+		}
 
-			String line = tower.get(i);
+		for (int k = i; k < i + shape.size() ; k++){
 
-			int index = line.lastIndexOf(check);
+			top = tower.get(k);
+
+			int index = top.lastIndexOf(check);
 			
 			if ( index == (width-1)){
 				room = false;
-			} else if (line.charAt(index + 1) == '#'){
+			} else if (top.charAt(index + 1) == '#'){
 				room = false;
 			} 
 
@@ -225,9 +232,9 @@ public class Day17 {
 
 		if (room){
 			
-			for (int i = 0; i < tower.size(); i++) {
+			for (int j = 0; j < tower.size(); j++) {
 				
-				String string = tower.get(i);
+				String string = tower.get(j);
 
 				if (string.contains(check) == true){
 
@@ -239,7 +246,7 @@ public class Day17 {
 					int remove = temp.lastIndexOf(check) + 1;
 					temp.delete(remove, remove+1);
 
-					tower.set(i, temp.toString());
+					tower.set(j, temp.toString());
 
 				}
 				
@@ -252,23 +259,23 @@ public class Day17 {
 
 		boolean room = true;
 		int i = 0;
-		String bottom = tower.get(i);
+		String top = tower.get(i);
 
-		while (bottom.contains(check) == false){
+		while (top.contains(check) == false){
 			i++;
-			bottom = tower.get(i);
+			top = tower.get(i);
 		}
 
-		for (int k = i; k < shape.size(); k++){
+		for (int k = i; k < i + shape.size() ; k++){
 
-			bottom = tower.get(k);
+			top = tower.get(k);
 			
-			int index = bottom.indexOf(check);
+			int index = top.indexOf(check);
 
 			if (index != -1){
 				if (index == 0){
 					room = false;
-				} else if (tower.get(k).charAt(index - 1) == '#'){
+				} else if (top.charAt(index - 1) == '#'){
 					room = false;
 				}
 			}
