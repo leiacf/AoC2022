@@ -127,29 +127,29 @@ public class Day25 {
 				long current = snafuList.get(i);
 				String insert = "";
 
-				switch (current){
+				switch ((int)current){
 	
-					case 4L: 
+					case 4: 
 						insert = "2";
 						break;
 	
-					case 3L: 
+					case 3: 
 	
 						insert = "1";
 						break;
 	
-					case 2L: 
+					case 2: 
 	
 						insert = "0";
 						break;
 	
 	
-					case 1L:
+					case 1:
 
 						insert = "-";
 						break;
 	
-					case 0L:
+					case 0:
 	
 						insert = "=";
 						break;
