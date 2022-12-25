@@ -166,9 +166,11 @@ public class Day17 {
 		// first check if we should rest
 		// if not, then check if there is room to fall further
 
-		if (line.contains("#") == false && line.contains("_") == false){
-			tower.remove(i);
-		} else if (line.contains("#") || line.contains("_")){
+		// rest?
+
+		// under == floor or under == shape
+
+		if (line.contains("#") || line.contains("_")) {	
 
 			String bottom = tower.get(i-1);
 
@@ -192,13 +194,26 @@ public class Day17 {
 					}
 					
 					rested = true;
-					break;
-
-				} else {
-
-					// TODO: Implement falling into existing lines
-					
+					return rested;
+		
 				}
+			}	
+
+		} 
+		
+		// if we can't rest, fall further
+
+		if (line.contains("#") == false && line.contains("_") == false){			// empty? (easy!)
+			tower.remove(i);
+		} else if (line.contains("#") || line.contains("_")) {					// not empty?? hard
+
+			String bottom = tower.get(i-1);
+
+			for (int j = 0; j < bottom.length(); j++){
+
+				if ((bottom.charAt(j) == '@') && ((line.charAt(j) == '#') || (line.charAt(j) == '_'))){
+					
+				}	
 
 			}
 
@@ -214,19 +229,21 @@ public class Day17 {
 
 		for (int i = 0; i < shape.size(); i++){
 
-			int index = tower.get(i).lastIndexOf(check);
+			String line = tower.get(i);
+
+			int index = line.lastIndexOf(check);
 			
 			if ( index == (width-1)){
 				room = false;
-			} else if (tower.get(i).charAt(index + 1) == '#'){
+			} else if (line.charAt(index + 1) == '#'){
 				room = false;
-			}
+			} 
 
 		}
 
 		if (room){
 			
-			for (int i =0; i < tower.size(); i++) {
+			for (int i = 0; i < tower.size(); i++) {
 				
 				String string = tower.get(i);
 
@@ -234,11 +251,11 @@ public class Day17 {
 
 					StringBuilder temp = new StringBuilder(string);
 
+					int add = temp.indexOf(check) -1;
+					temp.insert(add, " ");
+
 					int remove = temp.lastIndexOf(check) + 1;
 					temp.delete(remove, remove+1);
-
-					int add = temp.indexOf(check) - 1;
-					temp.insert(add, " ");
 
 					tower.set(i, temp.toString());
 
@@ -257,12 +274,15 @@ public class Day17 {
 		for (int i = 0; i < shape.size(); i++){
 
 			String line = tower.get(i);
+			
 			int index = line.indexOf(check);
 
-			if (index == 0){
-				room = false;
-			} else if (tower.get(i).charAt(index - 1) == '#'){
-				room = false;
+			if (index != -1){
+				if (index == 0){
+					room = false;
+				} else if (tower.get(i).charAt(index - 1) == '#'){
+					room = false;
+				}
 			}
 
 		}
@@ -280,7 +300,7 @@ public class Day17 {
 					int add = temp.lastIndexOf(check)+1;
 					temp.insert(add, " ");
 
-					int remove = temp.indexOf(check)-1;
+					int remove = temp.indexOf(check) -1 ;
 					temp.delete(remove, remove+1);
 					
 					tower.set(i, temp.toString());
