@@ -32,12 +32,12 @@ public class Day17 {
 	private void part1(ArrayList<String> data){
 
 		int times = 2022;
-		//int times = 5;
+		//int times = 10;
 		int width = 7;
 		int edge = 2;
 		int index = 0;
-		ArrayList<String> tower = new ArrayList<>();
 
+		ArrayList<String> tower = new ArrayList<>();
 		StringBuilder floor = new StringBuilder();
 
 		for (int i = 0; i < width; i++){
@@ -251,17 +251,24 @@ public class Day17 {
 	private void checkAndMoveLeft(ArrayList<String> tower, ArrayList<String> shape, String check){
 
 		boolean room = true;
+		int i = 0;
+		String bottom = tower.get(i);
 
-		for (int i = 0; i < shape.size(); i++){
+		while (bottom.contains(check) == false){
+			i++;
+			bottom = tower.get(i);
+		}
 
-			String line = tower.get(i);
+		for (int k = i; k < shape.size(); k++){
+
+			bottom = tower.get(k);
 			
-			int index = line.indexOf(check);
+			int index = bottom.indexOf(check);
 
 			if (index != -1){
 				if (index == 0){
 					room = false;
-				} else if (tower.get(i).charAt(index - 1) == '#'){
+				} else if (tower.get(k).charAt(index - 1) == '#'){
 					room = false;
 				}
 			}
@@ -270,21 +277,21 @@ public class Day17 {
 
 		if (room){
 
-			for (int i =0; i < tower.size(); i++) {
+			for (int j =0; j < tower.size(); j++) {
 				
-				String string = tower.get(i);
+				String string = tower.get(j);
 
 				if (string.contains(check) == true){
 
 					StringBuilder temp = new StringBuilder(string);
-					
+
 					int add = temp.lastIndexOf(check)+1;
 					temp.insert(add, " ");
 
-					int remove = temp.indexOf(check) -1 ;
+					int remove = temp.indexOf(check)-1;
 					temp.delete(remove, remove+1);
-					
-					tower.set(i, temp.toString());
+
+					tower.set(j, temp.toString());
 					
 				}
 				
@@ -301,11 +308,17 @@ public class Day17 {
 		String under = tower.get(i);
 		String over = tower.get(i-1);
 
-		for (int j = 0; j < under.length(); j++){
+		for (int k = i-1; k > shape.size(); k--){
 
-			if ((over.charAt(j) == '@') && (under.charAt(j) == '#')){
-				room = false;
-			} 
+			over = tower.get(k);
+			
+			for (int j = 0; j < under.length(); j++){
+
+				if ((over.charAt(j) == '@') && (under.charAt(j) == '#')){
+					room = false;
+				} 
+			
+			}
 
 		}
 
@@ -339,7 +352,7 @@ public class Day17 {
 
 		}
 
-		if (tower.get(0).contains("_") == false || tower.get(0).contains("#") == false){
+		if ((tower.get(0).contains("_") == false) && (tower.get(0).contains("#") == false)){
 			tower.remove(0);
 		}
 
