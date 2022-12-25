@@ -31,8 +31,8 @@ public class Day17 {
 
 	private void part1(ArrayList<String> data){
 
-		//int times = 2022;
-		int times = 5;
+		int times = 2022;
+		//int times = 5;
 		int width = 7;
 		int edge = 2;
 		int index = 0;
@@ -52,13 +52,10 @@ public class Day17 {
 			index = playTetris(tower, width, edge, jetstreams, index, i);
 		}
 
-		 
-		for (String string : tower){
-
-			System.out.println(string);
-
+		for (int i = 0; i < tower.size(); i++){
+			System.out.println(tower.get(i));
 		}
-		
+
 		System.out.println("The tower height is = " + tower.size());
 
 	}
@@ -90,15 +87,14 @@ public class Day17 {
 
 		boolean rested = false;
 
-		if (index >= jetstreams.length()){
-			index = 0;
-		}
-
 		while (rested == false){
 
 			rested = moveAndFall(tower, jetstreams.charAt(index), width, shape);
-			
 			index++;
+
+			if (index >= jetstreams.length()){
+				index = 0;
+			}
 
 		}
 
@@ -109,7 +105,6 @@ public class Day17 {
 	private boolean moveAndFall(ArrayList<String> tower, char jetstream, int width, ArrayList<String> shape) {
 
 		boolean rested = false;
-
 		String check = "@";
 
 		switch (jetstream){
@@ -120,8 +115,8 @@ public class Day17 {
 				break;
 
 			case '>':
-				checkAndMoveRight(tower, shape, check, width);
 
+				checkAndMoveRight(tower, shape, check, width);
 				break;
 
 			default:
@@ -131,96 +126,83 @@ public class Day17 {
 	
 		}
 
-		 
-		for (String string : tower){
-			System.out.println(string);
-		}
-		
-		System.out.println();
-		System.out.println();
-
-
-		rested = falling(tower, shape, check);
+		rested = fall(tower, shape, check, width);
 		
 		return rested;
 
 	}
 
-	private boolean falling(ArrayList<String> tower, ArrayList<String> shape, String check){
-
-		// start falling
-
-		boolean rested = false;
+	private boolean fall(ArrayList<String> tower, ArrayList<String> shape, String check, int width){
 
 		int i = 0;
-		String line = tower.get(i);
+		String under = tower.get(i);
 
-		while (line.contains(check) == false){
+		while (under.contains(check) == false){
 			i++;
-			line = tower.get(i);
+			under = tower.get(i);
 		}
 
 		i = i + shape.size();
-		line = tower.get(i);
+		under = tower.get(i);	
 
-		// first check if we should rest
-		// if not, then check if there is room to fall further
+		if (under.contains("#") || under.contains("_")) {		
 
-		// rest?
+			String over = tower.get(i-1);
 
-		// under == floor or under == shape
-
-		if (line.contains("#") || line.contains("_")) {	
-
-			String bottom = tower.get(i-1);
-
-			for (int j = 0; j < bottom.length(); j++){
-
-				if ((bottom.charAt(j) == '@') && ((line.charAt(j) == '#') || (line.charAt(j) == '_'))){
-					
-					i = i - shape.size();
-
-					for ( ; i < shape.size(); i++){
-
-						StringBuilder temp = new StringBuilder(tower.get(i));
-
-						while (temp.indexOf(check) != -1){
-							int start = temp.indexOf(check);
-							temp.replace(start, start+1, "#");
-						}
-
-						tower.set(i, temp.toString());
-
-					}
-					
-					rested = true;
-					return rested;
-		
-				}
-			}	
+			if (timeToRest(under, over)){
+				rest(i, shape, tower, check);
+				return true;
+			}
 
 		} 
-		
-		// if we can't rest, fall further
 
-		if (line.contains("#") == false && line.contains("_") == false){			// empty? (easy!)
+		if (under.contains("#") == false && under.contains("_") == false){
+			
 			tower.remove(i);
-		} else if (line.contains("#") || line.contains("_")) {					// not empty?? hard
 
-			String bottom = tower.get(i-1);
+		} else {
 
-			for (int j = 0; j < bottom.length(); j++){
-
-				if ((bottom.charAt(j) == '@') && ((line.charAt(j) == '#') || (line.charAt(j) == '_'))){
-					
-				}	
-
-			}
+			checkAndMoveDown(tower, shape, check, width, i);
 
 		}
 
-		return rested;
+		return false;
 
+	}
+
+	private void rest(int i, ArrayList<String> shape, ArrayList<String> tower, String check){
+		
+		i = i - shape.size();
+
+		for ( ; i < shape.size(); i++){
+
+			StringBuilder temp = new StringBuilder(tower.get(i));
+
+			while (temp.indexOf(check) != -1){
+				int start = temp.indexOf(check);
+				temp.replace(start, start+1, "#");
+			}
+
+			tower.set(i, temp.toString());
+
+		}
+	}
+
+	private boolean timeToRest(String under, String over){
+
+		boolean rested = false;
+
+		for (int i = 0; i < over.length(); i++){
+
+			if ((over.charAt(i) == '@') && ((under.charAt(i) == '#') || (under.charAt(i) == '_'))){
+				
+				rested = true;
+				break;
+
+			}
+		}
+		
+		return rested;
 	}
 
 	private void checkAndMoveRight(ArrayList<String> tower, ArrayList<String> shape, String check, int width){
@@ -251,9 +233,9 @@ public class Day17 {
 
 					StringBuilder temp = new StringBuilder(string);
 
-					int add = temp.indexOf(check) -1;
+					int add = temp.indexOf(check);
 					temp.insert(add, " ");
-
+					
 					int remove = temp.lastIndexOf(check) + 1;
 					temp.delete(remove, remove+1);
 
@@ -262,9 +244,8 @@ public class Day17 {
 				}
 				
 			}
-		} else {
-			System.out.println("Can't move right!");
-		}
+		} 
+
 	}
 
 	private void checkAndMoveLeft(ArrayList<String> tower, ArrayList<String> shape, String check){
@@ -309,8 +290,57 @@ public class Day17 {
 				
 			}
 			
-		} else {
-			System.out.println("Can't move left!");
+		} 
+
+	}
+
+	private void checkAndMoveDown(ArrayList<String> tower, ArrayList<String> shape, String check, int width, int i){
+		
+		boolean room = true;
+
+		String under = tower.get(i);
+		String over = tower.get(i-1);
+
+		for (int j = 0; j < under.length(); j++){
+
+			if ((over.charAt(j) == '@') && (under.charAt(j) == '#')){
+				room = false;
+			} 
+
+		}
+
+		if (room){
+			
+			for (; i > 0; i--) {
+
+				under = tower.get(i);
+				over = tower.get(i-1);
+
+				if (over.contains(check) == true){
+
+					StringBuilder tempUnder = new StringBuilder(under);
+					StringBuilder tempOver = new StringBuilder(over);
+
+					for (int j = 0; j < over.length(); j++){
+
+						if (over.charAt(j) == '@'){
+							tempUnder.replace(j, j+1, check);
+							tempOver.replace(j, j+1, " ");
+						}
+
+					}
+										
+					tower.set(i, tempUnder.toString());
+					tower.set(i-1, tempOver.toString());
+
+				}
+			
+			}
+
+		}
+
+		if (tower.get(0).contains("_") == false || tower.get(0).contains("#") == false){
+			tower.remove(0);
 		}
 
 	}
