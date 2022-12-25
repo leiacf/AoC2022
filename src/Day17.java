@@ -318,14 +318,13 @@ public class Day17 {
 		while (over.contains(check) == false){
 			i++;
 			over = tower.get(i);
-			System.out.println("i: " + i + " over: " + over);
 		}
 
 		for (int k = i; k < i+shape.size(); k++){
 
 			over = tower.get(k);
 			under = tower.get(i+shape.size());
-			
+
 			for (int j = 0; j < over.length(); j++){
 
 				if ((over.charAt(j) == '@') && (under.charAt(j) == '#')){
@@ -340,7 +339,7 @@ public class Day17 {
 
 		if (room){
 			
-			for (; i > 0; i--) {
+			for (; i >= 0; i--) {
 
 				over = tower.get(i);
 				under = tower.get(i+1);
@@ -359,8 +358,8 @@ public class Day17 {
 
 					}
 										
-					tower.set(i, tempUnder.toString());
-					tower.set(i-1, tempOver.toString());
+					tower.set(i, tempOver.toString());
+					tower.set(i+1, tempUnder.toString());
 
 				}
 			
