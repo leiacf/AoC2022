@@ -162,7 +162,7 @@ public class Day17 {
 
 		} else {
 
-			checkAndMoveDown(tower, shape, check, width, i);
+			checkAndMoveDown(tower, shape, check, width);
 
 		}
 
@@ -284,7 +284,7 @@ public class Day17 {
 
 		if (room){
 
-			for (int j =0; j < tower.size(); j++) {
+			for (int j = 0; j < tower.size(); j++) {
 				
 				String string = tower.get(j);
 
@@ -308,18 +308,25 @@ public class Day17 {
 
 	}
 
-	private void checkAndMoveDown(ArrayList<String> tower, ArrayList<String> shape, String check, int width, int i){
+	private void checkAndMoveDown(ArrayList<String> tower, ArrayList<String> shape, String check, int width){
 		
 		boolean room = true;
+		int i = 0;
+		String over = tower.get(i);
+		String under = tower.get(i+1);
 
-		String under = tower.get(i);
-		String over = tower.get(i-1);
+		while (over.contains(check) == false){
+			i++;
+			over = tower.get(i);
+			System.out.println("i: " + i + " over: " + over);
+		}
 
-		for (int k = i-1; k > shape.size(); k--){
+		for (int k = i; k < i+shape.size(); k++){
 
 			over = tower.get(k);
+			under = tower.get(i+shape.size());
 			
-			for (int j = 0; j < under.length(); j++){
+			for (int j = 0; j < over.length(); j++){
 
 				if ((over.charAt(j) == '@') && (under.charAt(j) == '#')){
 					room = false;
@@ -329,12 +336,14 @@ public class Day17 {
 
 		}
 
+		i = i + shape.size()-1;
+
 		if (room){
 			
 			for (; i > 0; i--) {
 
-				under = tower.get(i);
-				over = tower.get(i-1);
+				over = tower.get(i);
+				under = tower.get(i+1);
 
 				if (over.contains(check) == true){
 
