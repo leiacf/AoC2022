@@ -32,7 +32,7 @@ public class Day17 {
 	private void part1(ArrayList<String> data){
 
 		//int times = 2022;
-		int times = 5;
+		int times = 10;
 		int width = 7;
 		int edge = 2;
 		int index = 0;
@@ -140,8 +140,12 @@ public class Day17 {
 		String under = tower.get(i);
 
 		while (under.contains(check) == false){
-			i++;
 			under = tower.get(i);
+			i++;
+		}
+
+		for (String string: tower){
+			System.out.println(string);
 		}
 
 		i = i + shape.size();
@@ -160,7 +164,7 @@ public class Day17 {
 
 		} 
 
-		if (under.contains("#") == false && under.contains("_") == false){
+		if (under.contains("#") == false && (under.contains("_") == false) && under.contains("@") == false) {
 			
 			tower.remove(i);
 
@@ -375,10 +379,13 @@ public class Day17 {
 					}
 				
 				}
+
+				j--;
+
 			}
 		}
 
-		if ((tower.get(0).contains("_") == false) && (tower.get(0).contains("#") == false)){
+		if ((tower.get(0).contains("_") == false) && (tower.get(0).contains("#") == false) && tower.get(0).contains("@") == false){
 			tower.remove(0);
 		}
 
