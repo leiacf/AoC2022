@@ -31,8 +31,8 @@ public class Day17 {
 
 	private void part1(ArrayList<String> data){
 
-		int times = 2022;
-		//int times = 10;
+		//int times = 2022;
+		int times = 5;
 		int width = 7;
 		int edge = 2;
 		int index = 0;
@@ -49,7 +49,9 @@ public class Day17 {
 		String jetstreams = data.get(0);
 
 		for (int i = 0; i < times; i++){
+			
 			index = playTetris(tower, width, edge, jetstreams, index, i);
+
 		}
 
 		for (int i = 0; i < tower.size(); i++){
@@ -150,7 +152,9 @@ public class Day17 {
 			String over = tower.get(i-1);
 
 			if (timeToRest(under, over)){
-				rest(i, shape, tower, check);
+
+				rest(shape, tower, check);
+
 				return true;
 			}
 
@@ -170,20 +174,31 @@ public class Day17 {
 
 	}
 
-	private void rest(int i, ArrayList<String> shape, ArrayList<String> tower, String check){
+	private void rest(ArrayList<String> shape, ArrayList<String> tower, String check){
 		
-		i = i - shape.size();
+		int i = 0;
 
-		for ( ; i < shape.size(); i++){
+		String top = tower.get(i);
+		
+		while (top.contains(check) == false){
+			i++;
+			top = tower.get(i);
+		}
+		
+		for (int k = i ; k < i + shape.size(); k++){
 
-			StringBuilder temp = new StringBuilder(tower.get(i));
+			String replace = tower.get(k);
+			StringBuilder temp = new StringBuilder(replace);
 
-			while (temp.indexOf(check) != -1){
-				int start = temp.indexOf(check);
-				temp.replace(start, start+1, "#");
+			for (int j = 0; j < replace.length(); j++){
+
+				if (replace.charAt(j) == '@'){
+					temp.replace(j, j+1, "#");
+				}
+
 			}
 
-			tower.set(i, temp.toString());
+			tower.set(k, temp.toString());
 
 		}
 	}
@@ -313,58 +328,54 @@ public class Day17 {
 		boolean room = true;
 		int i = 0;
 		String over = tower.get(i);
-		String under = tower.get(i+1);
+		String under = "";
 
 		while (over.contains(check) == false){
 			i++;
 			over = tower.get(i);
 		}
 
-		for (int k = i; k < i+shape.size(); k++){
+		for (int j = i + shape.size()-1; j >= i; j--){
 
-			over = tower.get(k);
-			under = tower.get(i+shape.size());
+			over = tower.get(j);
+			under = tower.get(j+1);
 
-			for (int j = 0; j < over.length(); j++){
+			for (int k = 0; k < over.length(); k++){
 
-				if ((over.charAt(j) == '@') && (under.charAt(j) == '#')){
+				if ((over.charAt(k) == '@') && (under.charAt(k) == '#')){
 					room = false;
 				} 
 			
 			}
-
-		}
-
-		i = i + shape.size()-1;
-
-		if (room){
+		
+			if (room){
 			
-			for (; i >= 0; i--) {
+				for (int l = j; l >= 0; l--) {
 
-				over = tower.get(i);
-				under = tower.get(i+1);
+					over = tower.get(l);
+					under = tower.get(l+1);
 
-				if (over.contains(check) == true){
+					if (over.contains(check) == true){
 
-					StringBuilder tempUnder = new StringBuilder(under);
-					StringBuilder tempOver = new StringBuilder(over);
+						StringBuilder tempUnder = new StringBuilder(under);
+						StringBuilder tempOver = new StringBuilder(over);
 
-					for (int j = 0; j < over.length(); j++){
+						for (int k = 0; k < over.length(); k++){
 
-						if (over.charAt(j) == '@'){
-							tempUnder.replace(j, j+1, check);
-							tempOver.replace(j, j+1, " ");
+							if (over.charAt(k) == '@'){
+								tempUnder.replace(k, k+1, check);
+								tempOver.replace(k, k+1, " ");
+							}
+
 						}
+											
+						tower.set(l, tempOver.toString());
+						tower.set(l+1, tempUnder.toString());
 
 					}
-										
-					tower.set(i, tempOver.toString());
-					tower.set(i+1, tempUnder.toString());
-
+				
 				}
-			
 			}
-
 		}
 
 		if ((tower.get(0).contains("_") == false) && (tower.get(0).contains("#") == false)){
