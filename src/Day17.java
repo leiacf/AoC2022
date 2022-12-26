@@ -18,7 +18,7 @@ public class Day17 {
 		System.out.println();
 
 		part1(testinput);
-		//part1(input);
+		part1(input);
 
 		System.out.println();
 		System.out.println("Part 2: ");
@@ -31,8 +31,7 @@ public class Day17 {
 
 	private void part1(ArrayList<String> data){
 
-		//int times = 2022;
-		int times = 10;
+		int times = 2022;
 		int width = 7;
 		int edge = 2;
 		int index = 0;
@@ -54,11 +53,7 @@ public class Day17 {
 
 		}
 
-		for (int i = 0; i < tower.size(); i++){
-			System.out.println(tower.get(i));
-		}
-
-		System.out.println("The tower height is = " + tower.size());
+		System.out.println("The tower height is = " + (tower.size() -1));
 
 	}
 
@@ -140,29 +135,29 @@ public class Day17 {
 		String under = tower.get(i);
 
 		while (under.contains(check) == false){
-			under = tower.get(i);
 			i++;
+			under = tower.get(i);
 		}
 
-		for (String string: tower){
-			System.out.println(string);
+		for (int k = i; k < i + shape.size(); k++){
+
+			String over = tower.get(k);
+			under = tower.get(k+1);
+
+			if (under.contains("#") || under.contains("_")) {		
+				
+				if (timeToRest(under, over)){
+	
+					rest(shape, tower, check);
+	
+					return true;
+				}
+	
+			} 
+
 		}
 
-		i = i + shape.size();
-		under = tower.get(i);	
-
-		if (under.contains("#") || under.contains("_")) {		
-
-			String over = tower.get(i-1);
-
-			if (timeToRest(under, over)){
-
-				rest(shape, tower, check);
-
-				return true;
-			}
-
-		} 
+		under = tower.get(i);
 
 		if (under.contains("#") == false && (under.contains("_") == false) && under.contains("@") == false) {
 			
@@ -348,8 +343,9 @@ public class Day17 {
 
 				if ((over.charAt(k) == '@') && (under.charAt(k) == '#')){
 					room = false;
+					break;
 				} 
-			
+
 			}
 		
 			if (room){
@@ -366,7 +362,7 @@ public class Day17 {
 
 						for (int k = 0; k < over.length(); k++){
 
-							if (over.charAt(k) == '@'){
+							if (over.charAt(k) == '@' && under.charAt(k) == ' '){
 								tempUnder.replace(k, k+1, check);
 								tempOver.replace(k, k+1, " ");
 							}
@@ -383,9 +379,10 @@ public class Day17 {
 				j--;
 
 			}
+
 		}
 
-		if ((tower.get(0).contains("_") == false) && (tower.get(0).contains("#") == false) && tower.get(0).contains("@") == false){
+		if ((tower.get(0).contains("_") == false) && (tower.get(0).contains("#") == false) && (tower.get(0).contains("@") == false)){
 			tower.remove(0);
 		}
 
@@ -473,6 +470,7 @@ public class Day17 {
 	}
 
 	private void part2(ArrayList<String> data){
+
 
 	}
 
