@@ -18,7 +18,7 @@ public class Day24 {
 		System.out.println();
 
 		part1(testinput);
-		//part1(input);
+		part1(input);
 
 		System.out.println();
 		System.out.println("Part 2: ");
@@ -32,20 +32,51 @@ public class Day24 {
 	private void part1(ArrayList<String> data){
 
 		ArrayList<Node24[]> map = new ArrayList<>();
-		createMap(map, data);
-		
-		printMap(map);
-
-		boolean exit = false;
+		ArrayList<Node24> next = new ArrayList<>();
+		boolean end = false;
 		int i = 0;
 
-//		while (exit == false){
-		for (int j = 0; j < 5; j++){
+		createMap(map, data);
+		printMap(map);
 
-			exit = runDungeon(map);
+		Node24 start = map.get(0)[1];
+		Node24[] line = map.get(map.size()-1);
+		Node24 exit = line[line.length-2];
+		
+		next.add(start);
+
+		while (end == false){
+
+			end = runDungeon(map, next, exit);
 			i++;
 
-			printMap(map);
+			//printMap(map);
+
+		}
+
+		next.removeAll(next);
+		next.add(exit);
+		end = false;
+
+		while (end == false){
+
+			end = runDungeon(map, next, start);
+			i++;
+
+			//printMap(map);
+
+		}
+
+		next.removeAll(next);
+		next.add(start);
+		end = false;
+
+		while (end == false){
+
+			end = runDungeon(map, next, exit);
+			i++;
+
+			//printMap(map);
 
 		}
 
@@ -53,14 +84,75 @@ public class Day24 {
 
 	}
 
-	private boolean runDungeon(ArrayList<Node24[]> map){
+	private boolean runDungeon(ArrayList<Node24[]> map, ArrayList<Node24> next, Node24 exit){
 
 		moveBlizzards(map);
 
-		// move human
+		moveHuman(next);
+		
+		if (next.contains(exit)){
+			return true;
+		}
 
+		return false;
+		
+	}
+
+	private void moveHuman(ArrayList<Node24> current){
+
+		ArrayList<Node24> next = new ArrayList<>();
+
+		for (Node24 node : current){
+
+			Node24 temp = node.getUp();
+			if (valid(temp)){
+				if (next.contains(temp) == false){
+					next.add(temp);	
+				}	
+			}
+
+			temp = node.getRight();
+			if (valid(temp)){
+				if (next.contains(temp) == false){
+					next.add(temp);	
+				}	
+			}
+
+			temp = node.getDown();
+			if (valid(temp)){
+				if (next.contains(temp) == false){
+					next.add(temp);	
+				}	
+			}
+
+			temp = node.getLeft();
+			if (valid(temp)){
+				if (next.contains(temp) == false){
+					next.add(temp);	
+				}	
+			}
+
+			if (valid(node)){
+				if (next.contains(node) == false){
+					next.add(node);	
+				}
+			}
+
+		}
+
+		current.removeAll(current);
+		current.addAll(next);
+
+	}
+
+	private boolean valid(Node24 current){
+
+		if (current.hasBlizzard() || current.isWall()){
+			return false;
+		}
 
 		return true;
+
 	}
 
 	private void moveBlizzards(ArrayList<Node24[]> map){
